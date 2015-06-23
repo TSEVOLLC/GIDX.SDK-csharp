@@ -15,6 +15,9 @@ namespace GIDX.SDK.Models
         public string ResponseMessage { get; set; }
         public decimal ApiVersion { get; set; }
 
+        /// <summary>
+        /// Determines whether the response from the server was successful.
+        /// </summary>
         public bool IsSuccess
         {
             get
