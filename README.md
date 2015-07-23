@@ -35,7 +35,8 @@ var request = new CustomerRegistrationRequest
     City = "Sudden Valley",
     StateCode = "CA",
     PostalCode = "90001",
-    EmailAddress = "michael.bluth@saveourbluths.org"
+    EmailAddress = "michael.bluth@saveourbluths.org",
+    DeviceIpAddress = "144.214.138.154"
 };
 var response = gidxClient.CustomerRegistration(request);
 ```
