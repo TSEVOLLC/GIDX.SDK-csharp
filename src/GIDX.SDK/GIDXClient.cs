@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -14,7 +15,7 @@ namespace GIDX.SDK
         private const string DefaultDomain = "https://api.gidx-service.in";
         private const string DefaultVersion = "v2.01";
 
-        private readonly HttpClient httpClient;
+        private HttpClient httpClient;
 
         /// <summary>
         /// Default credentials to use when sending requests.  Credentials can be overridden on the request objects themselves.
@@ -39,20 +40,30 @@ namespace GIDX.SDK
         /// <param name="version">The API version number you want to use.</param>
         public GIDXClient(MerchantCredentials credentials, string domain, string version)
         {
-            Credentials = credentials;
-
             if (version[0] != 'v')
                 version = "v" + version;
 
             var path = string.Format("/{0}/api/", version);
+            Init(credentials, new Uri(new Uri(domain), path));
+        }
+
+        public GIDXClient(MerchantCredentials credentials, string baseAddress)
+        {
+            Init(credentials, new Uri(baseAddress));
+        }
+
+        private void Init(MerchantCredentials credentials, Uri baseAddress)
+        {
+            Credentials = credentials;
+
             httpClient = new HttpClient()
             {
-                BaseAddress = new Uri(new Uri(domain), path)
+                BaseAddress = baseAddress
             };
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        #region Public Methods
+        #region CustomerIdentity Methods
 
         /// <summary>
         /// Make a request to our CustomerRegistration endpoint.
@@ -101,6 +112,134 @@ namespace GIDX.SDK
 
         #endregion
 
+        #region DocumentLibrary Methods
+        
+        /// <summary>
+        /// Make a request to our DocumentRegistration endpoint to upload a document and attach it to a MerchantCustomerID.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="filePath">The local file path of the file to upload</param>
+        /// <returns></returns>
+        public DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, string filePath)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            if (filePath == null)
+                throw new ArgumentNullException("filePath");
+
+            return DocumentRegistration(request, File.OpenRead(filePath), Path.GetFileName(filePath));
+        }
+        
+        /// <summary>
+        /// Make a request to our DocumentRegistration endpoint to upload a document and attach it to a MerchantCustomerID.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="fileStream">A stream of the file to upload</param>
+        /// <param name="fileName">The name of the file to upload</param>
+        /// <returns></returns>
+        public DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, Stream fileStream, string fileName)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            if (fileStream == null)
+                throw new ArgumentNullException("fileStream");
+            
+            return UploadFile<DocumentRegistrationRequest, DocumentRegistrationResponse>(request, fileStream, fileName, "DocumentLibrary/DocumentRegistration");
+        }
+
+        /// <summary>
+        /// Make a request to our CustomerDocuments endpoint to get a list of uploaded documents attached to a customer.
+        /// </summary>
+        /// <param name="merchantCustomerID"></param>
+        /// <param name="merchantSessionID">Required.  Used for logging purposes.</param>
+        /// <returns></returns>
+        public CustomerDocumentsResponse CustomerDocuments(string merchantCustomerID, string merchantSessionID)
+        {
+            if (merchantCustomerID == null)
+                throw new ArgumentNullException("merchantCustomerID");
+
+            if (merchantSessionID == null)
+                throw new ArgumentNullException("merchantSessionID");
+
+            var request = new CustomerDocumentsRequest
+            {
+                MerchantCustomerID = merchantCustomerID,
+                MerchantSessionID = merchantSessionID
+            };
+            return CustomerDocuments(request);
+        }
+
+        /// <summary>
+        /// Make a request to our CustomerDocuments endpoint to get a list of uploaded documents attached to a customer.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public CustomerDocumentsResponse CustomerDocuments(CustomerDocumentsRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            return SendGetRequest<CustomerDocumentsRequest, CustomerDocumentsResponse>(request, "DocumentLibrary/CustomerDocuments");
+        }
+
+        /// <summary>
+        /// Make a request to our DownloadDocument endpoint to download a file that was previously uploaded.
+        /// </summary>
+        /// <param name="documentID">The DocumentID of the file.  It is returned in the <see cref="Document"/> object from the DocumentRegistration and CustomerDocuments methods.</param>
+        /// <param name="merchantSessionID">Required.  Used for logging purposes.</param>
+        /// <returns></returns>
+        public DownloadDocumentResponse DownloadDocument(string documentID, string merchantSessionID)
+        {
+            if (documentID == null)
+                throw new ArgumentNullException("documentID");
+
+            var request = new DownloadDocumentRequest
+            {
+                DocumentID = documentID,
+                MerchantSessionID = merchantSessionID
+            };
+
+            return DownloadDocument(request);
+        }
+
+        /// <summary>
+        /// Make a request to our DownloadDocument endpoint to download a file that was previously uploaded.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public DownloadDocumentResponse DownloadDocument(DownloadDocumentRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            DownloadDocumentResponse response = null;
+            var httpResponse = SendGetRequest(request, "DocumentLibrary/DownloadDocument");
+
+            //The DownloadDocument endpoint will return either the file as an attachment, or a JSON object if there was an error.
+
+            //DispositionType will be attachment if file was successfully returned.
+            if (httpResponse.Content.Headers.ContentDisposition != null && httpResponse.Content.Headers.ContentDisposition.DispositionType == "attachment")
+            {
+                response = new DownloadDocumentResponse
+                {
+                    FileStream = httpResponse.Content.ReadAsStreamAsync().Result,
+                    FileName = httpResponse.Content.Headers.ContentDisposition.FileName
+                };
+            }
+            else
+            {
+                //File was not successfully returned, check for JSON response instead
+                response = LoadResponse<DownloadDocumentResponse>(httpResponse);
+            }
+
+            response.DocumentID = request.DocumentID;
+            return response;
+        }
+        
+        #endregion
+
         #region Private Methods
 
         private TResponse SendPostRequest<TRequest, TResponse>(TRequest request, string endpoint)
@@ -120,11 +259,39 @@ namespace GIDX.SDK
             where TRequest : RequestBase
             where TResponse : ResponseBase, new()
         {
+            var httpResponse = SendGetRequest<TRequest>(request, endpoint);
+            return LoadResponse<TResponse>(httpResponse);
+        }
+
+        private HttpResponseMessage SendGetRequest<TRequest>(TRequest request, string endpoint)
+            where TRequest : RequestBase
+        {
             SetCredentials(request);
 
             var queryString = BuildQueryString(request);
             var fullUrl = string.Format("{0}?{1}", endpoint, queryString);
             var httpResponse = httpClient.GetAsync(fullUrl).Result;
+
+            return httpResponse;
+        }
+
+        private TResponse UploadFile<TRequest, TResponse>(TRequest request, Stream fileStream, string fileName, string endpoint)
+            where TRequest : RequestBase
+            where TResponse : ResponseBase, new()
+        {
+            SetCredentials(request);
+
+            var requestContent = new MultipartFormDataContent();
+
+            var fileContent = new StreamContent(fileStream);
+            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+            requestContent.Add(fileContent, "file", fileName);
+
+            string requestJson = JsonConvert.SerializeObject(request);
+            var jsonContent = new StringContent(requestJson);
+            requestContent.Add(jsonContent, "json");
+
+            var httpResponse = httpClient.PostAsync(endpoint, requestContent).Result;
 
             return LoadResponse<TResponse>(httpResponse);
         }
