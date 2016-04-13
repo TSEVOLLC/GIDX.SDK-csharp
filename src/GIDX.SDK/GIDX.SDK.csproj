@@ -61,20 +61,20 @@
     <Compile Include="IGIDXClient.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Birth.cs" />
-    <Compile Include="Models\CategoryType.cs" />
+    <Compile Include="Models\DocumentLibrary\CategoryType.cs" />
     <Compile Include="Models\Citizenship.cs" />
-    <Compile Include="Models\DownloadDocumentResponse.cs" />
-    <Compile Include="Models\DownloadDocumentRequest.cs" />
-    <Compile Include="Models\CustomerProfileRequest.cs" />
-    <Compile Include="Models\CustomerProfileResponse.cs" />
-    <Compile Include="Models\CustomerRegistrationRequest.cs" />
-    <Compile Include="Models\CustomerRegistrationResponse.cs" />
+    <Compile Include="Models\DocumentLibrary\DownloadDocumentResponse.cs" />
+    <Compile Include="Models\DocumentLibrary\DownloadDocumentRequest.cs" />
+    <Compile Include="Models\CustomerIdentity\CustomerProfileRequest.cs" />
+    <Compile Include="Models\CustomerIdentity\CustomerProfileResponse.cs" />
+    <Compile Include="Models\CustomerIdentity\CustomerRegistrationRequest.cs" />
+    <Compile Include="Models\CustomerIdentity\CustomerRegistrationResponse.cs" />
     <Compile Include="Models\Device.cs" />
-    <Compile Include="Models\Document.cs" />
-    <Compile Include="Models\DocumentNote.cs" />
-    <Compile Include="Models\DocumentRegistrationRequest.cs" />
-    <Compile Include="Models\DocumentRegistrationResponse.cs" />
-    <Compile Include="Models\DocumentStatus.cs" />
+    <Compile Include="Models\DocumentLibrary\Document.cs" />
+    <Compile Include="Models\DocumentLibrary\DocumentNote.cs" />
+    <Compile Include="Models\DocumentLibrary\DocumentRegistrationRequest.cs" />
+    <Compile Include="Models\DocumentLibrary\DocumentRegistrationResponse.cs" />
+    <Compile Include="Models\DocumentLibrary\DocumentStatus.cs" />
     <Compile Include="Models\ElementBase.cs" />
     <Compile Include="Models\Email.cs" />
     <Compile Include="Models\IdDocument.cs" />
@@ -83,9 +83,8 @@
     <Compile Include="Models\MerchantCredentials.cs" />
     <Compile Include="Models\Name.cs" />
     <Compile Include="Models\Phone.cs" />
-    <Compile Include="Models\ProfileDocumentRequest.cs" />
-    <Compile Include="Models\CustomerDocumentsRequest.cs" />
-    <Compile Include="Models\CustomerDocumentsResponse.cs" />
+    <Compile Include="Models\DocumentLibrary\CustomerDocumentsRequest.cs" />
+    <Compile Include="Models\DocumentLibrary\CustomerDocumentsResponse.cs" />
     <Compile Include="Models\ProfileMatch.cs" />
     <Compile Include="Models\RequestBase.cs" />
     <Compile Include="Models\ResponseBase.cs" />
@@ -95,6 +94,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GIDX.SDK.Models;
+using GIDX.SDK.Models.CustomerIdentity;
+using GIDX.SDK.Models.DocumentLibrary;
 
 namespace GIDX.SDK
 {

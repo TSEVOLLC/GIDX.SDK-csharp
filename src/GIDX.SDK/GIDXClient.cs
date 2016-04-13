@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using GIDX.SDK.Models;
+using GIDX.SDK.Models.CustomerIdentity;
+using GIDX.SDK.Models.DocumentLibrary;
 using Newtonsoft.Json;
 
 namespace GIDX.SDK
