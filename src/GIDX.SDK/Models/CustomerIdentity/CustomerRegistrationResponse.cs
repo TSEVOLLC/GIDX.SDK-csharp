@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GIDX.SDK.Models
+namespace GIDX.SDK.Models.CustomerIdentity
 {
     public class CustomerRegistrationResponse : ResponseBase
     {

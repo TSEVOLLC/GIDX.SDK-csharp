@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GIDX.SDK.Models;
 
 namespace GIDX.SDK
 {
-    public interface IGIDXClient
+    public interface IGIDXClient : IClient
     {
-        CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request);
-        CustomerProfileResponse CustomerProfile(string merchantCustomerID, string merchantSessionID);
-        CustomerProfileResponse CustomerProfile(CustomerProfileRequest request);
+        ICustomerIdentityClient CustomerIdentity { get; }
+        IDocumentLibraryClient DocumentLibrary { get; }
     }
 }

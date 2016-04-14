@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GIDX.SDK.Models;
 
-namespace GIDX.SDK.Models
+namespace GIDX.SDK
 {
-    public class CustomerProfileRequest : RequestBase
+    public interface IClient
     {
-        public string MerchantCustomerID { get; set; }
+        MerchantCredentials Credentials { get; set; }
     }
 }

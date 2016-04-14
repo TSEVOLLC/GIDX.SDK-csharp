@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GIDX.SDK.Models
+namespace GIDX.SDK.Models.DocumentLibrary
 {
-    public class DocumentRegistrationResponse : ResponseBase
+    public class CustomerDocumentsRequest : RequestBase
     {
         public string MerchantCustomerID { get; set; }
-        public Document Document { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GIDX.SDK.Models
+namespace GIDX.SDK.Models.CustomerIdentity
 {
     public class CustomerRegistrationRequest : RequestBase, IMerchantCredentials
     {
