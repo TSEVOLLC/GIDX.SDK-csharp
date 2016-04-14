@@ -43,5 +43,25 @@ namespace GIDX.SDK
 
             return SendGetRequest<RegistrationStatusRequest, RegistrationStatusResponse>(request, "RegistrationStatus");
         }
+
+        public CustomerRegistrationResponse CustomerRegistration(string merchantCustomerID)
+        {
+            if (merchantCustomerID == null)
+                throw new ArgumentNullException("merchantCustomerID");
+
+            var request = new CustomerRegistrationRequest
+            {
+                MerchantCustomerID = merchantCustomerID
+            };
+            return CustomerRegistration(request);
+        }
+
+        public CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            return SendGetRequest<CustomerRegistrationRequest, CustomerRegistrationResponse>(request, "CustomerRegistration");
+        }
     }
 }

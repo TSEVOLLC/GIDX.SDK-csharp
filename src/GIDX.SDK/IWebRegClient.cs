@@ -8,5 +8,7 @@ namespace GIDX.SDK
         CreateSessionResponse CreateSession(CreateSessionRequest request);
         RegistrationStatusResponse RegistrationStatus(RegistrationStatusRequest request);
         RegistrationStatusResponse RegistrationStatus(string merchantSessionID);
+        CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request);
+        CustomerRegistrationResponse CustomerRegistration(string merchantCustomerID);
     }
 }

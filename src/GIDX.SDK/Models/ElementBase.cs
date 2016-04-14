@@ -8,6 +8,11 @@ namespace GIDX.SDK.Models
 {
     public abstract class ElementBase
     {
+        public ElementBase()
+        {
+            Primary = true;
+        }
+
         public decimal IdentityConfidenceScore { get; set; }
         public bool Primary { get; set; }
     }

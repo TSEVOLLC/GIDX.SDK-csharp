@@ -91,6 +91,7 @@
     <Compile Include="Models\LocationDetail.cs" />
     <Compile Include="Models\MerchantCredentials.cs" />
     <Compile Include="Models\Name.cs" />
+    <Compile Include="Models\Note.cs" />
     <Compile Include="Models\Phone.cs" />
     <Compile Include="Models\DocumentLibrary\CustomerDocumentsRequest.cs" />
     <Compile Include="Models\DocumentLibrary\CustomerDocumentsResponse.cs" />
@@ -101,6 +102,8 @@
     <Compile Include="Models\WatchCheck.cs" />
     <Compile Include="Models\WebReg\CreateSessionRequest.cs" />
     <Compile Include="Models\WebReg\CreateSessionResponse.cs" />
+    <Compile Include="Models\WebReg\CustomerRegistrationRequest.cs" />
+    <Compile Include="Models\WebReg\CustomerRegistrationResponse.cs" />
     <Compile Include="Models\WebReg\RegistrationStatusRequest.cs" />
     <Compile Include="Models\WebReg\RegistrationStatusResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
