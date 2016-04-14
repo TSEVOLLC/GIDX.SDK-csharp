@@ -65,10 +65,12 @@
     <Compile Include="ICustomerIdentityClient.cs" />
     <Compile Include="IDocumentLibraryClient.cs" />
     <Compile Include="IGIDXClient.cs" />
+    <Compile Include="IWebCashierClient.cs" />
     <Compile Include="IWebRegClient.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Birth.cs" />
     <Compile Include="Models\CreateSessionResponseBase.cs" />
+    <Compile Include="Models\CustomerDetails.cs" />
     <Compile Include="Models\DocumentLibrary\CategoryType.cs" />
     <Compile Include="Models\Citizenship.cs" />
     <Compile Include="Models\DocumentLibrary\DownloadDocumentResponse.cs" />
@@ -100,13 +102,27 @@
     <Compile Include="Models\ResponseBase.cs" />
     <Compile Include="Models\SessionStatusResponseBase.cs" />
     <Compile Include="Models\WatchCheck.cs" />
+    <Compile Include="Models\WebCashier\CashierPaymentAmount.cs" />
+    <Compile Include="Models\WebCashier\CreateSessionRequest.cs" />
+    <Compile Include="Models\WebCashier\CreateSessionResponse.cs" />
+    <Compile Include="Models\WebCashier\CreateSessionWebWalletRequest.cs" />
+    <Compile Include="Models\WebCashier\CreateSessionWebWalletResponse.cs" />
+    <Compile Include="Models\WebCashier\PayActionCode.cs" />
+    <Compile Include="Models\WebCashier\PaymentDetail.cs" />
+    <Compile Include="Models\WebCashier\PaymentDetailRequest.cs" />
+    <Compile Include="Models\WebCashier\PaymentDetailResponse.cs" />
+    <Compile Include="Models\WebCashier\PaymentUpdateRequest.cs" />
+    <Compile Include="Models\WebCashier\PaymentUpdateResponse.cs" />
+    <Compile Include="Models\WebCashier\WebCashierStatusResponse.cs" />
     <Compile Include="Models\WebReg\CreateSessionRequest.cs" />
     <Compile Include="Models\WebReg\CreateSessionResponse.cs" />
     <Compile Include="Models\WebReg\CustomerRegistrationRequest.cs" />
     <Compile Include="Models\WebReg\CustomerRegistrationResponse.cs" />
     <Compile Include="Models\WebReg\RegistrationStatusRequest.cs" />
     <Compile Include="Models\WebReg\RegistrationStatusResponse.cs" />
+    <Compile Include="Models\WebCashier\WebCashierStatusRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebCashierClient.cs" />
     <Compile Include="WebRegClient.cs" />
   </ItemGroup>
   <ItemGroup>

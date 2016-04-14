@@ -10,6 +10,7 @@ namespace GIDX.SDK
     {
         ICustomerIdentityClient CustomerIdentity { get; }
         IDocumentLibraryClient DocumentLibrary { get; }
+        IWebCashierClient WebCashier { get; }
         IWebRegClient WebReg { get; }
     }
 }

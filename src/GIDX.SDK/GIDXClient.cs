@@ -82,6 +82,17 @@ namespace GIDX.SDK
             }
         }
 
+        private IWebCashierClient _webCashier;
+        public IWebCashierClient WebCashier
+        {
+            get
+            {
+                if (_webCashier == null)
+                    _webCashier = new WebCashierClient(Credentials, _baseAddress);
+                return _webCashier;
+            }
+        }
+
         private IWebRegClient _webReg;
         public IWebRegClient WebReg
         {
