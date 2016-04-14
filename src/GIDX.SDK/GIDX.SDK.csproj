@@ -57,7 +57,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientBase.cs" />
+    <Compile Include="CustomerIdentityClient.cs" />
+    <Compile Include="DocumentLibraryClient.cs" />
     <Compile Include="GIDXClient.cs" />
+    <Compile Include="IClient.cs" />
+    <Compile Include="ICustomerIdentityClient.cs" />
+    <Compile Include="IDocumentLibraryClient.cs" />
     <Compile Include="IGIDXClient.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Birth.cs" />
