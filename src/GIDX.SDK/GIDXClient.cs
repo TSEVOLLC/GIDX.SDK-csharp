@@ -82,6 +82,17 @@ namespace GIDX.SDK
             }
         }
 
+        private IWebRegClient _webReg;
+        public IWebRegClient WebReg
+        {
+            get
+            {
+                if (_webReg == null)
+                    _webReg = new WebRegClient(Credentials, _baseAddress);
+                return _webReg;
+            }
+        }
+
         #endregion
     }
 }

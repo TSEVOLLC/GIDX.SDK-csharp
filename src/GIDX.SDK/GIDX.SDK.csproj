@@ -65,8 +65,10 @@
     <Compile Include="ICustomerIdentityClient.cs" />
     <Compile Include="IDocumentLibraryClient.cs" />
     <Compile Include="IGIDXClient.cs" />
+    <Compile Include="IWebRegClient.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Birth.cs" />
+    <Compile Include="Models\CreateSessionResponseBase.cs" />
     <Compile Include="Models\DocumentLibrary\CategoryType.cs" />
     <Compile Include="Models\Citizenship.cs" />
     <Compile Include="Models\DocumentLibrary\DownloadDocumentResponse.cs" />
@@ -83,6 +85,7 @@
     <Compile Include="Models\DocumentLibrary\DocumentStatus.cs" />
     <Compile Include="Models\ElementBase.cs" />
     <Compile Include="Models\Email.cs" />
+    <Compile Include="Models\ICustomerDetails.cs" />
     <Compile Include="Models\IdDocument.cs" />
     <Compile Include="Models\IMerchantCredentials.cs" />
     <Compile Include="Models\LocationDetail.cs" />
@@ -94,8 +97,14 @@
     <Compile Include="Models\ProfileMatch.cs" />
     <Compile Include="Models\RequestBase.cs" />
     <Compile Include="Models\ResponseBase.cs" />
+    <Compile Include="Models\SessionStatusResponseBase.cs" />
     <Compile Include="Models\WatchCheck.cs" />
+    <Compile Include="Models\WebReg\CreateSessionRequest.cs" />
+    <Compile Include="Models\WebReg\CreateSessionResponse.cs" />
+    <Compile Include="Models\WebReg\RegistrationStatusRequest.cs" />
+    <Compile Include="Models\WebReg\RegistrationStatusResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebRegClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

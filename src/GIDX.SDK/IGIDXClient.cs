@@ -10,5 +10,6 @@ namespace GIDX.SDK
     {
         ICustomerIdentityClient CustomerIdentity { get; }
         IDocumentLibraryClient DocumentLibrary { get; }
+        IWebRegClient WebReg { get; }
     }
 }
