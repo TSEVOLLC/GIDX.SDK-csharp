@@ -72,7 +72,7 @@ namespace GIDX.SDK
             return SendGetRequest<PaymentDetailRequest, PaymentDetailResponse>(request, "PaymentDetail");
         }
 
-        public PaymentUpdateResponse PaymentUpdate(string merchantTransactionID, string paymentStatusCode)
+        public PaymentUpdateResponse PaymentUpdate(string merchantTransactionID, PaymentStatusCode paymentStatusCode)
         {
             if (merchantTransactionID == null)
                 throw new ArgumentNullException("merchantTransactionID");

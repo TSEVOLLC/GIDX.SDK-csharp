@@ -10,7 +10,7 @@ namespace GIDX.SDK
         PaymentDetailResponse PaymentDetail(PaymentDetailRequest request);
         PaymentDetailResponse PaymentDetail(string merchantTransactionID);
         PaymentUpdateResponse PaymentUpdate(PaymentUpdateRequest request);
-        PaymentUpdateResponse PaymentUpdate(string merchantTransactionID, string paymentStatusCode);
+        PaymentUpdateResponse PaymentUpdate(string merchantTransactionID, PaymentStatusCode paymentStatusCode);
         WebCashierStatusResponse WebCashierStatus(WebCashierStatusRequest request);
         WebCashierStatusResponse WebCashierStatus(string merchantSessionID);
     }

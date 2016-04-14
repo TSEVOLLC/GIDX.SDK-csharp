@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace GIDX.SDK.Models.WebCashier
 {
-    public enum PayActionCode
+    public enum PaymentAmountType
     {
-        Pay,
-        Payout
+        Credit,
+        Debit,
+        Open
     }
 }

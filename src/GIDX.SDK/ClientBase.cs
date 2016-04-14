@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -17,25 +18,29 @@ namespace GIDX.SDK
     /// </summary>
     internal abstract class ClientBase
     {
-        protected HttpClient httpClient;
+        protected readonly HttpClient _httpClient;
+        private readonly JsonSerializer _jsonSerializer;
 
         public MerchantCredentials Credentials { get; set; }
 
         protected ClientBase(MerchantCredentials credentials, Uri baseAddress)
             : this(credentials, baseAddress, null)
         {
-
+            
         }
 
         protected ClientBase(MerchantCredentials credentials, Uri baseAddress, string service)
         {
             Credentials = credentials;
 
-            httpClient = new HttpClient()
+            _httpClient = new HttpClient()
             {
                 BaseAddress = string.IsNullOrEmpty(service) ? baseAddress : new Uri(baseAddress, service)
             };
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Creating a JsonSerializer instead of using JsonConvert because we don't want to use any default settings set by the application
+            _jsonSerializer = JsonSerializer.Create();
         }
 
         protected TResponse SendPostRequest<TRequest, TResponse>(TRequest request, string endpoint)
@@ -44,9 +49,9 @@ namespace GIDX.SDK
         {
             SetCredentials(request);
 
-            var requestJson = JsonConvert.SerializeObject(request);
+            var requestJson = ToJson(request);
             var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-            var httpResponse = httpClient.PostAsync(endpoint, content).Result;
+            var httpResponse = _httpClient.PostAsync(endpoint, content).Result;
 
             return LoadResponse<TResponse>(httpResponse);
         }
@@ -66,7 +71,7 @@ namespace GIDX.SDK
 
             var queryString = BuildQueryString(request);
             var fullUrl = string.Format("{0}?{1}", endpoint, queryString);
-            var httpResponse = httpClient.GetAsync(fullUrl).Result;
+            var httpResponse = _httpClient.GetAsync(fullUrl).Result;
 
             return httpResponse;
         }
@@ -82,12 +87,12 @@ namespace GIDX.SDK
             var fileContent = new StreamContent(fileStream);
             fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
             requestContent.Add(fileContent, "file", fileName);
-
-            string requestJson = JsonConvert.SerializeObject(request);
+            
+            string requestJson = ToJson(request);
             var jsonContent = new StringContent(requestJson);
             requestContent.Add(jsonContent, "json");
 
-            var httpResponse = httpClient.PostAsync(endpoint, requestContent).Result;
+            var httpResponse = _httpClient.PostAsync(endpoint, requestContent).Result;
 
             return LoadResponse<TResponse>(httpResponse);
         }
@@ -100,7 +105,7 @@ namespace GIDX.SDK
             if (httpResponse.IsSuccessStatusCode)
             {
                 var responseJson = httpResponse.Content.ReadAsStringAsync().Result;
-                response = JsonConvert.DeserializeObject<TResponse>(responseJson);
+                response = FromJson<TResponse>(responseJson);
             }
             else
             {
@@ -157,6 +162,23 @@ namespace GIDX.SDK
                 ).ToList();
 
             return string.Join("&", pairs);
+        }
+
+        protected string ToJson(object o)
+        {
+            using(var stringWriter = new StringWriter(CultureInfo.InvariantCulture))
+            {
+                _jsonSerializer.Serialize(stringWriter, o);
+                return stringWriter.ToString();
+            }
+        }
+
+        protected T FromJson<T>(string json)
+        {
+            using (var jsonReader = new JsonTextReader(new StringReader(json)))
+            {
+                return _jsonSerializer.Deserialize<T>(jsonReader);
+            }
         }
     }
 }

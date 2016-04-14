@@ -100,6 +100,7 @@
     <Compile Include="Models\ProfileMatch.cs" />
     <Compile Include="Models\RequestBase.cs" />
     <Compile Include="Models\ResponseBase.cs" />
+    <Compile Include="Models\SessionStatusCode.cs" />
     <Compile Include="Models\SessionStatusResponseBase.cs" />
     <Compile Include="Models\WatchCheck.cs" />
     <Compile Include="Models\WebCashier\CashierPaymentAmount.cs" />
@@ -108,9 +109,12 @@
     <Compile Include="Models\WebCashier\CreateSessionWebWalletRequest.cs" />
     <Compile Include="Models\WebCashier\CreateSessionWebWalletResponse.cs" />
     <Compile Include="Models\WebCashier\PayActionCode.cs" />
+    <Compile Include="Models\WebCashier\PaymentAmountCode.cs" />
+    <Compile Include="Models\WebCashier\PaymentAmountType.cs" />
     <Compile Include="Models\WebCashier\PaymentDetail.cs" />
     <Compile Include="Models\WebCashier\PaymentDetailRequest.cs" />
     <Compile Include="Models\WebCashier\PaymentDetailResponse.cs" />
+    <Compile Include="Models\WebCashier\PaymentStatusCode.cs" />
     <Compile Include="Models\WebCashier\PaymentUpdateRequest.cs" />
     <Compile Include="Models\WebCashier\PaymentUpdateResponse.cs" />
     <Compile Include="Models\WebCashier\WebCashierStatusResponse.cs" />

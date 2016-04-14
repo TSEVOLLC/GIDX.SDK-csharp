@@ -9,6 +9,6 @@ namespace GIDX.SDK.Models.WebCashier
     public class PaymentUpdateRequest : RequestBase
     {
         public string MerchantTransactionID { get; set; }
-        public string PaymentStatusCode { get; set; }
+        public PaymentStatusCode PaymentStatusCode { get; set; }
     }
 }
