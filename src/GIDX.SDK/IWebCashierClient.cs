@@ -13,5 +13,6 @@ namespace GIDX.SDK
         PaymentUpdateResponse PaymentUpdate(string merchantTransactionID, PaymentStatusCode paymentStatusCode);
         WebCashierStatusResponse WebCashierStatus(WebCashierStatusRequest request);
         WebCashierStatusResponse WebCashierStatus(string merchantSessionID);
+        SessionStatusCallback ParseCallback(string json);
     }
 }

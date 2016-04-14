@@ -10,5 +10,6 @@ namespace GIDX.SDK
         RegistrationStatusResponse RegistrationStatus(string merchantSessionID);
         CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request);
         CustomerRegistrationResponse CustomerRegistration(string merchantCustomerID);
+        SessionStatusCallback ParseCallback(string json);
     }
 }

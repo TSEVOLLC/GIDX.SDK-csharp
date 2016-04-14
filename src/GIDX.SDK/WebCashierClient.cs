@@ -95,5 +95,13 @@ namespace GIDX.SDK
 
             return SendPostRequest<PaymentUpdateRequest, PaymentUpdateResponse>(request, "PaymentUpdate");
         }
+
+        public SessionStatusCallback ParseCallback(string json)
+        {
+            if (json == null)
+                throw new ArgumentNullException("json");
+
+            return FromJson<SessionStatusCallback>(json);
+        }
     }
 }

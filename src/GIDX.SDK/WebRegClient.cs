@@ -63,5 +63,13 @@ namespace GIDX.SDK
 
             return SendGetRequest<CustomerRegistrationRequest, CustomerRegistrationResponse>(request, "CustomerRegistration");
         }
+
+        public SessionStatusCallback ParseCallback(string json)
+        {
+            if (json == null)
+                throw new ArgumentNullException("json");
+
+            return FromJson<SessionStatusCallback>(json);
+        }
     }
 }
