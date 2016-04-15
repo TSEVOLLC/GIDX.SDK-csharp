@@ -1,9 +1,17 @@
 # GIDX.SDK-csharp
-A C# SDK for accessing the GIDX DirectAPI services.
+A C# SDK for accessing the GIDX API services.
 
 Available via NuGet: [GIDX.SDK](https://www.nuget.org/packages/GIDX.SDK)
 
-## Usage
+### What's Here
+
+- [Using the SDK](#using-the-sdk)
+- [Customer Identity](#customer-identity)
+  - [Direct API](#customer-identity-direct-api)
+  - [Web API](#customer-identity-web-api)
+- [Web Cashier](#web-cashier)
+
+## Using the SDK
 
 ### Creating a client
 
@@ -20,11 +28,24 @@ var credentials = new MerchantCredentials
 var gidxClient = new GIDXClient(credentials);
 ```
 
-### Customer Identity
+### Making a request
 
-#### Making a request
+Each API method has a corresponding request object used to transport the request parameters.  The credentials that you passed to the **GIDXClient** constructor can be overridden here by setting the corresponding properties on the request object.  See code below for examples.
 
-Each API method has a corresponding request object used to transport the request parameters as shown below.  The credentials that you passed to the **GIDXClient** constructor can be overridden here by setting the corresponding properties on the request object.
+### Using the response
+
+Each response object returned from **GIDXClient** has properties you can use to determine the status of the response.  Use the **IsSuccess** property to know if the request completed without a problem.
+
+```csharp
+if (response.IsSuccess)
+{
+    //Continue on with your code here
+}
+```
+
+## Customer Identity
+
+### Customer Identity (Direct API)
 
 ```csharp
 var request = new CustomerRegistrationRequest
@@ -47,20 +68,100 @@ var response = gidxClient.CustomerIdentity.CustomerRegistration(request);
 ```
 **Note**: The data used in this example is just a sample and will not return any results. 
 
-#### Using the response
+### Customer Identity (Web API)
 
-Each response object returned from **GIDXClient** has properties you can use to determine the status of the response.  Use the **IsSuccess** property to know if the request completed without a problem.
+#### Creating a session
 
 ```csharp
-if (response.IsSuccess)
+var request = new WebReg.CreateSessionRequest
 {
-    //Continue on with your code here
-}
+    //A GUID is generated below for MerchantCustomerID and MerchantSessionID for testing purposes only.
+    //Ideally, you would pull these from your database.
+    MerchantCustomerID = Guid.NewGuid().ToString("N"),
+    MerchantSessionID = Guid.NewGuid().ToString("N"),
+    CallbackURL = "http://www.yourserver.com/callback",
+    FirstName = "Michael",
+    LastName = "Bluth",
+    EmailAddress = "michael.bluth@saveourbluths.org",
+    CustomerIpAddress = "144.214.138.154"
+};
+var response = gidxClient.WebReg.CreateSession(request);
+
+//response.SessionURL will contain the HTML of the script tag you should embed in your page
 ```
 
-### Document Library
+#### Getting the session status
 
-#### Uploading a document
+```csharp
+var response = gidxClient.WebReg.RegistrationStatus("[Original MerchantSessionID]");
+```
+
+#### Handling the callback
+
+The SDK provides **SessionStatusCallback** and **SessionStatusCallbackResponse** models for you to use in your callback.  You can attempt to let your web framework handle the model binding or use the **ParseCallback** method provided by the SDK.
+
+```csharp
+var callback = gidxClient.WebReg.ParseCallback(callbackJson);
+
+var callbackResponse = new WebReg.SessionStatusCallbackResponse
+{
+    MerchantID = gidxClient.Credentials.MerchantID,
+    SessionStatus = "OK",
+    CustomerID = "[Insert MerchantCustomerID]"
+};
+
+//Get customer details after registration is completed
+var customerRegistration = gidxClient.WebReg.CustomerRegistration("[Insert MerchantCustomerID]");
+```
+
+## Web Cashier
+
+### Creating a session
+
+```csharp
+var request = new WebCashier.CreateSessionRequest
+{
+    //A GUID is generated below for MerchantCustomerID, MerchantSessionID and MerchantTransactionID for testing purposes only.
+    //Ideally, you would pull these from your database.
+    MerchantCustomerID = Guid.NewGuid().ToString("N"),
+    MerchantSessionID = Guid.NewGuid().ToString("N"),
+    MerchantTransactionID = Guid.NewGuid().ToString("N"),
+    CallbackURL = "http://www.yourserver.com/callback",
+    CustomerIpAddress = "144.214.138.154",
+    PayActionCode = PayActionCode.Pay
+};
+var response = gidxClient.WebCashier.CreateSession(request);
+
+//response.SessionURL will contain the HTML of the script tag you should embed in your page
+```
+
+### Getting the session status
+
+```csharp
+var response = gidxClient.WebCashier.WebCashierStatus("[Original MerchantSessionID]");
+```
+
+### Handling the callback
+
+The SDK provides **SessionStatusCallback** and **SessionStatusCallbackResponse** models for you to use in your callback.  You can attempt to let your web framework handle the model binding or use the **ParseCallback** method provided by the SDK.
+
+```csharp
+var callback = gidxClient.WebCashier.ParseCallback(callbackJson);
+
+var callbackResponse = new WebCashier.SessionStatusCallbackResponse
+{
+    MerchantID = gidxClient.Credentials.MerchantID,
+    SessionStatus = "OK",
+    MerchantTransactionID = callback.MerchantTransactionID
+};
+
+//Get payment details not returned in the callback
+var paymentDetails = gidxClient.WebCashier.PaymentDetail(callback.MerchantTransactionID);
+```
+
+## Document Library
+
+### Uploading a document
 
 To upload a document, you will pass a **DocumentRegistrationRequest** request object, along with the file you would like to upload.
 
@@ -82,7 +183,7 @@ var response = gidxClient.DocumentLibrary.DocumentRegistration(request, @"C:\Pat
 var response = gidxClient.DocumentLibrary.DocumentRegistration(request, stream, "File.png");
 ```
 
-#### Downloading a document
+### Downloading a document
 
 To download a document, you will pass its DocumentID.  If the request is successful, the **DownloadDocumentResponse** object will have its FileStream and FileName properties filled.  If the request was unsuccessful, the ResponseCode and ResponseMessage properties will be filled.
 
