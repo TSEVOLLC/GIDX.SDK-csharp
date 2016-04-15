@@ -43,7 +43,7 @@ var request = new CustomerRegistrationRequest
     EmailAddress = "michael.bluth@saveourbluths.org",
     DeviceIpAddress = "144.214.138.154"
 };
-var response = gidxClient.CustomerRegistration(request);
+var response = gidxClient.CustomerIdentity.CustomerRegistration(request);
 ```
 **Note**: The data used in this example is just a sample and will not return any results. 
 
@@ -75,11 +75,11 @@ var request = new DocumentRegistrationRequest
     DocumentStatus = DocumentStatus.ReviewComplete
 };
 
-var response = gidxClient.DocumentRegistration(request, @"C:\Path\To\File.png");
+var response = gidxClient.DocumentLibrary.DocumentRegistration(request, @"C:\Path\To\File.png");
 
 //Or if the file is not saved locally, you can load it into a Stream
 
-var response = gidxClient.DocumentRegistration(request, stream, "File.png");
+var response = gidxClient.DocumentLibrary.DocumentRegistration(request, stream, "File.png");
 ```
 
 #### Downloading a document
@@ -89,7 +89,7 @@ To download a document, you will pass its DocumentID.  If the request is success
 ```csharp
 var documentID = "abc123";
 var merchantSessionID = Guid.NewGuid().ToString("N");
-var response = gidxClient.DownloadDocument(documentID, merchantSessionID);
+var response = gidxClient.DocumentLibrary.DownloadDocument(documentID, merchantSessionID);
 
 if (response.IsSuccess)
 {
