@@ -156,7 +156,8 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+  <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Release' ">
+    <Exec Command="..\.nuget\nuget.exe pack GIDX.SDK.csproj -Prop Configuration=Release"></Exec>
+  </Target>
 </Project>
