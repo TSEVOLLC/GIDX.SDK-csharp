@@ -33,9 +33,20 @@ namespace GIDX.SDK
         {
             Credentials = credentials;
 
+            if (!string.IsNullOrEmpty(service))
+            {
+                baseAddress = new Uri(baseAddress, service);
+            }
+
+            if (!baseAddress.AbsoluteUri.EndsWith("/"))
+            {
+                //Make sure baseAddress ends in slash so that we can just pass the method name when making requests
+                baseAddress = new Uri(baseAddress.AbsoluteUri + "/");
+            }
+
             _httpClient = new HttpClient()
             {
-                BaseAddress = string.IsNullOrEmpty(service) ? baseAddress : new Uri(baseAddress, service)
+                BaseAddress = baseAddress
             };
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
