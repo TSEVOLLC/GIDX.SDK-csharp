@@ -93,6 +93,17 @@ namespace GIDX.SDK
             }
         }
 
+        private IWebMyAccountClient _webMyAccount;
+        public IWebMyAccountClient WebMyAccount
+        {
+            get
+            {
+                if (_webMyAccount == null)
+                    _webMyAccount = new WebMyAccountClient(Credentials, _baseAddress);
+                return _webMyAccount;
+            }
+        }
+
         private IWebRegClient _webReg;
         public IWebRegClient WebReg
         {
