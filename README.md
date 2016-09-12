@@ -10,6 +10,7 @@ Available via NuGet: [GIDX.SDK](https://www.nuget.org/packages/GIDX.SDK)
   - [Direct API](#customer-identity-direct-api)
   - [Web API](#customer-identity-web-api)
 - [Web Cashier](#web-cashier)
+- [Upgrading to v2](#upgrading-to-v2)
 
 ## Using the SDK
 
@@ -201,4 +202,42 @@ if (response.IsSuccess)
         response.FileStream.CopyTo(localFileStream);
     }
 }
+```
+
+## Upgrading to v2
+
+### Breaking changes
+
+- **Sub-clients** - To stop the **GIDXClient** class from getting too big, API methods for different services were organized into sub-clients exposed as properties in **GIDXClient**
+
+- **Model namespaces** - Models that aren't shared across sub-clients were moved into their own namespace under **GIDX.SDK.Models**
+
+### Migration
+
+#### Customer Identity (Direct API)
+
+- **CustomerRegistration** and **CustomerProfile** methods were moved to the **CustomerIdentity** sub-client
+- Models namespace is now **GIDX.SDK.Models.CustomerIdentity**
+
+```csharp
+using GIDX.SDK.Models.CustomerIdentity;
+
+//v1
+var response = gidxClient.CustomerRegistration(request);
+//v2 equivalent
+var response = gidxClient.CustomerIdentity.CustomerRegistration(request);
+```
+
+#### Document Library
+
+- **DocumentRegistration**, **DownloadDocument** and **CustomerDocuments** methods were moved to the **DocumentLibrary** sub-client
+- Models namespace is now **GIDX.SDK.Models.DocumentLibrary**
+
+```csharp
+using GIDX.SDK.Models.DocumentLibrary;
+
+//v1
+var response = gidxClient.DocumentRegistration(request, @"C:\Path\To\File.png");
+//v2 equivalent
+var response = gidxClient.DocumentLibrary.DocumentRegistration(request, @"C:\Path\To\File.png");
 ```
