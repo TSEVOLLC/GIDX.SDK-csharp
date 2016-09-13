@@ -140,6 +140,8 @@
     <Compile Include="WebRegClient.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="NuSpec\GIDX.SDK.nuspec" />
+    <None Include="NuSpec\tools\Init.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
