@@ -9,6 +9,21 @@ namespace GIDX.SDK
     public interface ICustomerIdentityClient : IClient
     {
         /// <summary>
+        /// Make a request to our CustomerMonitor endpoint.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        CustomerMonitorResponse CustomerMonitor(CustomerMonitorRequest request);
+
+        /// <summary>
+        /// Make a request to our CustomerMonitor endpoint.
+        /// </summary>
+        /// <param name="merchantCustomerID"></param>
+        /// <param name="merchantSessionID"></param>
+        /// <returns></returns>
+        CustomerMonitorResponse CustomerMonitor(string merchantCustomerID, string merchantSessionID);
+
+        /// <summary>
         /// Make a request to our CustomerProfile endpoint.
         /// </summary>
         /// <param name="request"></param>

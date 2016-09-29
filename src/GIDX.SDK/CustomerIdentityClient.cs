@@ -44,5 +44,26 @@ namespace GIDX.SDK
 
             return SendGetRequest<CustomerProfileRequest, CustomerProfileResponse>(request, "CustomerProfile");
         }
+
+        public CustomerMonitorResponse CustomerMonitor(string merchantCustomerID, string merchantSessionID)
+        {
+            if (merchantCustomerID == null)
+                throw new ArgumentNullException("merchantCustomerID");
+
+            var request = new CustomerMonitorRequest
+            {
+                MerchantCustomerID = merchantCustomerID,
+                MerchantSessionID = merchantSessionID
+            };
+            return CustomerMonitor(request);
+        }
+
+        public CustomerMonitorResponse CustomerMonitor(CustomerMonitorRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            return SendGetRequest<CustomerMonitorRequest, CustomerMonitorResponse>(request, "CustomerMonitor");
+        }
     }
 }
