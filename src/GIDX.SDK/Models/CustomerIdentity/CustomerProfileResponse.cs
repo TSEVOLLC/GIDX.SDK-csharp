@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace GIDX.SDK.Models.CustomerIdentity
 {
-    public class CustomerProfileResponse : ResponseBase
+    public class CustomerProfileResponse : ResponseBase, IReasonCodes
     {
         public string MerchantCustomerID { get; set; }
+        
+        public string ProfileVerificationStatus { get; set; }
+
+        public List<string> ReasonCodes { get; set; }
 
         public List<Name> Name { get; set; }
         public List<Birth> DateOfBirth { get; set; }
