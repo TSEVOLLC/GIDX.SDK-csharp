@@ -122,10 +122,11 @@ var customerRegistration = gidxClient.WebReg.CustomerRegistration("[Insert Merch
 ```csharp
 var request = new WebCashier.CreateSessionRequest
 {
-    //A GUID is generated below for MerchantCustomerID, MerchantSessionID and MerchantTransactionID for testing purposes only.
+    //A GUID is generated below for MerchantCustomerID, MerchantSessionID, MerchantOrderID and MerchantTransactionID for testing purposes only.
     //Ideally, you would pull these from your database.
     MerchantCustomerID = Guid.NewGuid().ToString("N"),
     MerchantSessionID = Guid.NewGuid().ToString("N"),
+    MerchantOrderID = Guid.NewGuid().ToString("N"),
     MerchantTransactionID = Guid.NewGuid().ToString("N"),
     CallbackURL = "http://www.yourserver.com/callback",
     CustomerIpAddress = "144.214.138.154",
