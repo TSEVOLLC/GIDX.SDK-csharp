@@ -8,7 +8,7 @@ using Newtonsoft.Json.Converters;
 
 namespace GIDX.SDK.Models
 {
-    public abstract class SessionStatusResponseBase : ResponseBase
+    public abstract class SessionStatusResponseBase : ResponseBase, IReasonCodes
     {
         public decimal SessionScore { get; set; }
 

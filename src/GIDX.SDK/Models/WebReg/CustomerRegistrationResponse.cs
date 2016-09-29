@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GIDX.SDK.Models.WebReg
 {
-    public class CustomerRegistrationResponse : ResponseBase
+    public class CustomerRegistrationResponse : ResponseBase, IReasonCodes
     {
         public string RegMerchantSessionID { get; set; }
         public string MerchantCustomerID { get; set; }

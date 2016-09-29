@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GIDX.SDK.Models.CustomerIdentity
 {
-    public class CustomerRegistrationResponse : ResponseBase
+    public class CustomerRegistrationResponse : ResponseBase, IReasonCodes
     {
         public string MerchantCustomerID { get; set; }
         public decimal IdentityConfidenceScore { get; set; }

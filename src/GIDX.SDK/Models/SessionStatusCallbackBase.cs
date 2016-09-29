@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GIDX.SDK.Models
 {
-    public abstract class SessionStatusCallbackBase
+    public abstract class SessionStatusCallbackBase : IReasonCodes
     {
         public string SessionID { get; set; }
         public string MerchantSessionID { get; set; }

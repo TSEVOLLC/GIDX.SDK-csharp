@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GIDX.SDK.Models
 {
-    public class LocationDetail
+    public class LocationDetail : IReasonCodes
     {
         public string IdentifierType { get; set; }
         public string IdentifierUsed { get; set; }
