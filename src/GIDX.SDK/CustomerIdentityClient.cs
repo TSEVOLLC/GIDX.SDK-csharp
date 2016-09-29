@@ -16,33 +16,15 @@ namespace GIDX.SDK
 
         }
 
-        public CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request)
+
+        #region CustomerMonitor
+
+        public CustomerMonitorResponse CustomerMonitor(CustomerMonitorRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendPostRequest<CustomerRegistrationRequest, CustomerRegistrationResponse>(request, "CustomerRegistration");
-        }
-
-        public CustomerProfileResponse CustomerProfile(string merchantCustomerID, string merchantSessionID)
-        {
-            if (merchantCustomerID == null)
-                throw new ArgumentNullException("merchantCustomerID");
-
-            var request = new CustomerProfileRequest
-            {
-                MerchantCustomerID = merchantCustomerID,
-                MerchantSessionID = merchantSessionID
-            };
-            return CustomerProfile(request);
-        }
-
-        public CustomerProfileResponse CustomerProfile(CustomerProfileRequest request)
-        {
-            if (request == null)
-                throw new ArgumentNullException("request");
-
-            return SendGetRequest<CustomerProfileRequest, CustomerProfileResponse>(request, "CustomerProfile");
+            return SendGetRequest<CustomerMonitorRequest, CustomerMonitorResponse>(request, "CustomerMonitor");
         }
 
         public CustomerMonitorResponse CustomerMonitor(string merchantCustomerID, string merchantSessionID)
@@ -58,12 +40,39 @@ namespace GIDX.SDK
             return CustomerMonitor(request);
         }
 
-        public CustomerMonitorResponse CustomerMonitor(CustomerMonitorRequest request)
+        #endregion
+
+        #region CustomerProfile
+
+        public CustomerProfileResponse CustomerProfile(CustomerProfileRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendGetRequest<CustomerMonitorRequest, CustomerMonitorResponse>(request, "CustomerMonitor");
+            return SendGetRequest<CustomerProfileRequest, CustomerProfileResponse>(request, "CustomerProfile");
+        }
+
+        public CustomerProfileResponse CustomerProfile(string merchantCustomerID, string merchantSessionID)
+        {
+            if (merchantCustomerID == null)
+                throw new ArgumentNullException("merchantCustomerID");
+
+            var request = new CustomerProfileRequest
+            {
+                MerchantCustomerID = merchantCustomerID,
+                MerchantSessionID = merchantSessionID
+            };
+            return CustomerProfile(request);
+        }
+
+        #endregion
+
+        public CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            return SendPostRequest<CustomerRegistrationRequest, CustomerRegistrationResponse>(request, "CustomerRegistration");
         }
     }
 }

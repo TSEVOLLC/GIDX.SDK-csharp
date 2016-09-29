@@ -17,26 +17,14 @@ namespace GIDX.SDK
 
         }
 
-        public DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, string filePath)
+        #region CustomerDocuments
+
+        public CustomerDocumentsResponse CustomerDocuments(CustomerDocumentsRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            if (filePath == null)
-                throw new ArgumentNullException("filePath");
-
-            return DocumentRegistration(request, File.OpenRead(filePath), Path.GetFileName(filePath));
-        }
-
-        public DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, Stream fileStream, string fileName)
-        {
-            if (request == null)
-                throw new ArgumentNullException("request");
-
-            if (fileStream == null)
-                throw new ArgumentNullException("fileStream");
-
-            return UploadFile<DocumentRegistrationRequest, DocumentRegistrationResponse>(request, fileStream, fileName, "DocumentRegistration");
+            return SendGetRequest<CustomerDocumentsRequest, CustomerDocumentsResponse>(request, "CustomerDocuments");
         }
 
         public CustomerDocumentsResponse CustomerDocuments(string merchantCustomerID, string merchantSessionID)
@@ -55,27 +43,35 @@ namespace GIDX.SDK
             return CustomerDocuments(request);
         }
 
-        public CustomerDocumentsResponse CustomerDocuments(CustomerDocumentsRequest request)
+        #endregion
+
+        #region DocumentRegistration
+
+        public DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, Stream fileStream, string fileName)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendGetRequest<CustomerDocumentsRequest, CustomerDocumentsResponse>(request, "CustomerDocuments");
+            if (fileStream == null)
+                throw new ArgumentNullException("fileStream");
+
+            return UploadFile<DocumentRegistrationRequest, DocumentRegistrationResponse>(request, fileStream, fileName, "DocumentRegistration");
         }
 
-        public DownloadDocumentResponse DownloadDocument(string documentID, string merchantSessionID)
+        public DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, string filePath)
         {
-            if (documentID == null)
-                throw new ArgumentNullException("documentID");
+            if (request == null)
+                throw new ArgumentNullException("request");
 
-            var request = new DownloadDocumentRequest
-            {
-                DocumentID = documentID,
-                MerchantSessionID = merchantSessionID
-            };
+            if (filePath == null)
+                throw new ArgumentNullException("filePath");
 
-            return DownloadDocument(request);
+            return DocumentRegistration(request, File.OpenRead(filePath), Path.GetFileName(filePath));
         }
+
+        #endregion
+
+        #region DownloadDocument
 
         public DownloadDocumentResponse DownloadDocument(DownloadDocumentRequest request)
         {
@@ -105,5 +101,21 @@ namespace GIDX.SDK
             response.DocumentID = request.DocumentID;
             return response;
         }
+
+        public DownloadDocumentResponse DownloadDocument(string documentID, string merchantSessionID)
+        {
+            if (documentID == null)
+                throw new ArgumentNullException("documentID");
+
+            var request = new DownloadDocumentRequest
+            {
+                DocumentID = documentID,
+                MerchantSessionID = merchantSessionID
+            };
+
+            return DownloadDocument(request);
+        }
+
+        #endregion
     }
 }

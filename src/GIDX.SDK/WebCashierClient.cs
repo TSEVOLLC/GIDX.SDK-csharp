@@ -32,24 +32,22 @@ namespace GIDX.SDK
             return SendPostRequest<CreateSessionWebWalletRequest, CreateSessionWebWalletResponse>(request, "CreateSessionWebWallet");
         }
 
-        public WebCashierStatusResponse WebCashierStatus(string merchantSessionID)
+        public SessionStatusCallback ParseCallback(string json)
         {
-            if (merchantSessionID == null)
-                throw new ArgumentNullException("merchantSessionID");
+            if (json == null)
+                throw new ArgumentNullException("json");
 
-            var request = new WebCashierStatusRequest
-            {
-                MerchantSessionID = merchantSessionID
-            };
-            return WebCashierStatus(request);
+            return FromJson<SessionStatusCallback>(json);
         }
 
-        public WebCashierStatusResponse WebCashierStatus(WebCashierStatusRequest request)
+        #region PaymentDetail
+
+        public PaymentDetailResponse PaymentDetail(PaymentDetailRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendGetRequest<WebCashierStatusRequest, WebCashierStatusResponse>(request, "WebCashierStatus");
+            return SendGetRequest<PaymentDetailRequest, PaymentDetailResponse>(request, "PaymentDetail");
         }
 
         public PaymentDetailResponse PaymentDetail(string merchantTransactionID)
@@ -64,12 +62,16 @@ namespace GIDX.SDK
             return PaymentDetail(request);
         }
 
-        public PaymentDetailResponse PaymentDetail(PaymentDetailRequest request)
+        #endregion
+
+        #region PaymentUpdate
+
+        public PaymentUpdateResponse PaymentUpdate(PaymentUpdateRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendGetRequest<PaymentDetailRequest, PaymentDetailResponse>(request, "PaymentDetail");
+            return SendPostRequest<PaymentUpdateRequest, PaymentUpdateResponse>(request, "PaymentUpdate");
         }
 
         public PaymentUpdateResponse PaymentUpdate(string merchantTransactionID, PaymentStatusCode paymentStatusCode)
@@ -88,20 +90,30 @@ namespace GIDX.SDK
             return PaymentUpdate(request);
         }
 
-        public PaymentUpdateResponse PaymentUpdate(PaymentUpdateRequest request)
+        #endregion
+
+        #region WebCashierStatus
+
+        public WebCashierStatusResponse WebCashierStatus(WebCashierStatusRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendPostRequest<PaymentUpdateRequest, PaymentUpdateResponse>(request, "PaymentUpdate");
+            return SendGetRequest<WebCashierStatusRequest, WebCashierStatusResponse>(request, "WebCashierStatus");
         }
 
-        public SessionStatusCallback ParseCallback(string json)
+        public WebCashierStatusResponse WebCashierStatus(string merchantSessionID)
         {
-            if (json == null)
-                throw new ArgumentNullException("json");
+            if (merchantSessionID == null)
+                throw new ArgumentNullException("merchantSessionID");
 
-            return FromJson<SessionStatusCallback>(json);
+            var request = new WebCashierStatusRequest
+            {
+                MerchantSessionID = merchantSessionID
+            };
+            return WebCashierStatus(request);
         }
+
+        #endregion
     }
 }

@@ -24,24 +24,14 @@ namespace GIDX.SDK
             return SendPostRequest<CreateSessionRequest, CreateSessionResponse>(request, "CreateSession");
         }
 
-        public RegistrationStatusResponse RegistrationStatus(string merchantSessionID)
-        {
-            if (merchantSessionID == null)
-                throw new ArgumentNullException("merchantSessionID");
+        #region CustomerRegistration
 
-            var request = new RegistrationStatusRequest
-            {
-                MerchantSessionID = merchantSessionID
-            };
-            return RegistrationStatus(request);
-        }
-
-        public RegistrationStatusResponse RegistrationStatus(RegistrationStatusRequest request)
+        public CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendGetRequest<RegistrationStatusRequest, RegistrationStatusResponse>(request, "RegistrationStatus");
+            return SendGetRequest<CustomerRegistrationRequest, CustomerRegistrationResponse>(request, "CustomerRegistration");
         }
 
         public CustomerRegistrationResponse CustomerRegistration(string merchantCustomerID)
@@ -56,13 +46,7 @@ namespace GIDX.SDK
             return CustomerRegistration(request);
         }
 
-        public CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request)
-        {
-            if (request == null)
-                throw new ArgumentNullException("request");
-
-            return SendGetRequest<CustomerRegistrationRequest, CustomerRegistrationResponse>(request, "CustomerRegistration");
-        }
+        #endregion
 
         public SessionStatusCallback ParseCallback(string json)
         {
@@ -71,5 +55,29 @@ namespace GIDX.SDK
 
             return FromJson<SessionStatusCallback>(json);
         }
+
+        #region RegistrationStatus
+
+        public RegistrationStatusResponse RegistrationStatus(RegistrationStatusRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            return SendGetRequest<RegistrationStatusRequest, RegistrationStatusResponse>(request, "RegistrationStatus");
+        }
+
+        public RegistrationStatusResponse RegistrationStatus(string merchantSessionID)
+        {
+            if (merchantSessionID == null)
+                throw new ArgumentNullException("merchantSessionID");
+
+            var request = new RegistrationStatusRequest
+            {
+                MerchantSessionID = merchantSessionID
+            };
+            return RegistrationStatus(request);
+        }
+
+        #endregion
     }
 }
