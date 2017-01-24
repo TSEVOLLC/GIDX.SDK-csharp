@@ -22,5 +22,6 @@ namespace GIDX.SDK.Models.CustomerIdentity
         public List<Phone> Phone { get; set; }
         public List<Address> Address { get; set; }
         public List<Device> Device { get; set; }
+        public List<string> ProfileMatches { get; set; }
     }
 }
