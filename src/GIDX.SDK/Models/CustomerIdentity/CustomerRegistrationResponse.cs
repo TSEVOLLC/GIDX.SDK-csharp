@@ -12,6 +12,7 @@ namespace GIDX.SDK.Models.CustomerIdentity
 
         public LocationDetail LocationDetail { get; set; }
         public ProfileMatch ProfileMatch { get; set; }
+        public List<string> ProfileMatches { get; set; }
         public List<WatchCheck> WatchChecks { get; set; }
     }
 }
