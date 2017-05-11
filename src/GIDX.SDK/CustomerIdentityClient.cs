@@ -24,7 +24,7 @@ namespace GIDX.SDK
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendGetRequest<CustomerMonitorRequest, CustomerMonitorResponse>(request, "CustomerMonitor");
+            return SendPostRequest<CustomerMonitorRequest, CustomerMonitorResponse>(request, "CustomerMonitor");
         }
 
         public CustomerMonitorResponse CustomerMonitor(string merchantCustomerID, string merchantSessionID)
