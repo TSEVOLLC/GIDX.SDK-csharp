@@ -72,6 +72,7 @@
     <Compile Include="Models\Birth.cs" />
     <Compile Include="Models\CustomerIdentity\CustomerMonitorRequest.cs" />
     <Compile Include="Models\CustomerIdentity\CustomerMonitorResponse.cs" />
+    <Compile Include="Models\DeviceGpsDetails.cs" />
     <Compile Include="Models\IReasonCodes.cs" />
     <Compile Include="Models\SessionStatusCallbackResponseBase.cs" />
     <Compile Include="Models\CreateSessionResponseBase.cs" />

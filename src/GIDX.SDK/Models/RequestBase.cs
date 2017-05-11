@@ -33,5 +33,7 @@ namespace GIDX.SDK.Models
             get { return _ipAddress; }
             set { _ipAddress = value; }
         }
+
+        public DeviceGpsDetails DeviceGps { get; set; }
     }
 }

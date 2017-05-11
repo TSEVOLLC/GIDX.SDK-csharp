@@ -15,6 +15,7 @@ namespace GIDX.SDK.Models
         public double? Longitude { get; set; }
         public int? Radius { get; set; }
         public int? Speed { get; set; }
+        public double? Altitude { get; set; }
 
         public DateTime? LocationDateTime { get; set; }
         public bool ComplianceLocationStatus { get; set; }
