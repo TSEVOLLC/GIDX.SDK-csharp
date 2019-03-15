@@ -13,6 +13,13 @@ namespace GIDX.SDK
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
+        LocationResponse Location(LocationRequest request);
+
+        /// <summary>
+        /// Make a request to our CustomerMonitor endpoint.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         CustomerMonitorResponse CustomerMonitor(CustomerMonitorRequest request);
 
         /// <summary>

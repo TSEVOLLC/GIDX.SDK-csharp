@@ -70,6 +70,8 @@
     <Compile Include="IWebRegClient.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Birth.cs" />
+    <Compile Include="Models\CustomerIdentity\LocationResponse.cs" />
+    <Compile Include="Models\CustomerIdentity\LocationRequest.cs" />
     <Compile Include="Models\CustomerIdentity\CustomerMonitorRequest.cs" />
     <Compile Include="Models\CustomerIdentity\CustomerMonitorResponse.cs" />
     <Compile Include="Models\DeviceGpsDetails.cs" />
