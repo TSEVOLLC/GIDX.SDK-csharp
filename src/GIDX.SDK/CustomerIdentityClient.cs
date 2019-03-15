@@ -16,18 +16,6 @@ namespace GIDX.SDK
 
         }
 
-        #region Location
-
-        public LocationResponse Location(LocationRequest request)
-        {
-            if (request == null)
-                throw new ArgumentNullException("request");
-
-            return SendPostRequest<LocationRequest, LocationResponse>(request, "Location");
-        }
-
-        #endregion
-
         #region CustomerMonitor
 
         public CustomerMonitorResponse CustomerMonitor(CustomerMonitorRequest request)
@@ -84,6 +72,14 @@ namespace GIDX.SDK
                 throw new ArgumentNullException("request");
 
             return SendPostRequest<CustomerRegistrationRequest, CustomerRegistrationResponse>(request, "CustomerRegistration");
+        }
+
+        public LocationResponse Location(LocationRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            return SendPostRequest<LocationRequest, LocationResponse>(request, "Location");
         }
     }
 }
