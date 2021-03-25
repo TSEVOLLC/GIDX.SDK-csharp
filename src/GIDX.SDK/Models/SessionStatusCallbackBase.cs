@@ -10,6 +10,7 @@ namespace GIDX.SDK.Models
     {
         public string SessionID { get; set; }
         public string MerchantSessionID { get; set; }
+        public string MerchantCustomerID { get; set; }
         public decimal SessionScore { get; set; }
         public List<string> ReasonCodes { get; set; }
         public string ServiceType { get; set; }
