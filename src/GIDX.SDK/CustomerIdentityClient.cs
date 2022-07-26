@@ -81,5 +81,15 @@ namespace GIDX.SDK
 
             return SendPostRequest<LocationRequest, LocationResponse>(request, "Location");
         }
+
+        #region RemoveCustomer
+
+        public RemoveCustomerResponse RemoveCustomer(RemoveCustomerRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            return SendPostRequest<RemoveCustomerRequest, RemoveCustomerResponse>(request, "RemoveCustomer");
+        }
     }
 }
