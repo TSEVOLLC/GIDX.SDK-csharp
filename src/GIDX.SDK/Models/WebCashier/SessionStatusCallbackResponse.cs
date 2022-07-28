@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GIDX.SDK.Models.WebCashier
 {
-    public class SessionStatusCallbackResponse : SessionStatusCallbackResponseBase
+    public class SessionStatusCallbackResponse
     {
         public string MerchantTransactionID { get; set; }
     }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace GIDX.SDK.Models.WebReg
 {
-    public class SessionStatusCallbackResponse : SessionStatusCallbackResponseBase
+    public class SessionStatusCallbackResponse
     {
-        public string CustomerID { get; set; }
+        public string MerchantCustomerID { get; set; }
     }
 }
