@@ -20,35 +20,27 @@ namespace GIDX.SDK
     {
         protected readonly HttpClient _httpClient;
         private readonly JsonSerializer _jsonSerializer;
+        private readonly Uri _baseAddress;
 
         public MerchantCredentials Credentials { get; set; }
 
-        protected ClientBase(MerchantCredentials credentials, Uri baseAddress)
-            : this(credentials, baseAddress, null)
-        {
-            
-        }
-
-        protected ClientBase(MerchantCredentials credentials, Uri baseAddress, string service)
+        protected ClientBase(MerchantCredentials credentials, Uri baseAddress, HttpClient httpClient, string service)
         {
             Credentials = credentials;
 
+            _baseAddress = baseAddress;
             if (!string.IsNullOrEmpty(service))
             {
-                baseAddress = new Uri(baseAddress, service);
+                _baseAddress = new Uri(_baseAddress, service);
             }
 
-            if (!baseAddress.AbsoluteUri.EndsWith("/"))
+            if (!_baseAddress.AbsoluteUri.EndsWith("/"))
             {
                 //Make sure baseAddress ends in slash so that we can just pass the method name when making requests
-                baseAddress = new Uri(baseAddress.AbsoluteUri + "/");
+                _baseAddress = new Uri(_baseAddress.AbsoluteUri + "/");
             }
 
-            _httpClient = new HttpClient()
-            {
-                BaseAddress = baseAddress
-            };
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient = httpClient;
 
             //Creating a JsonSerializer instead of using JsonConvert because we don't want to use any default settings set by the application
             _jsonSerializer = JsonSerializer.Create();
@@ -61,10 +53,15 @@ namespace GIDX.SDK
             SetCredentials(request);
 
             var requestJson = ToJson(request);
-            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-            var httpResponse = _httpClient.PostAsync(endpoint, content).Result;
 
-            return LoadResponse<TResponse>(httpResponse);
+            using (var httpRequest = new HttpRequestMessage(HttpMethod.Post, new Uri(_baseAddress, endpoint)))
+            {
+                httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                httpRequest.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+                var httpResponse = _httpClient.SendAsync(httpRequest).Result;
+
+                return LoadResponse<TResponse>(httpResponse);
+            }
         }
 
         protected TResponse SendGetRequest<TRequest, TResponse>(TRequest request, string endpoint)
@@ -82,9 +79,12 @@ namespace GIDX.SDK
 
             var queryString = BuildQueryString(request);
             var fullUrl = string.Format("{0}?{1}", endpoint, queryString);
-            var httpResponse = _httpClient.GetAsync(fullUrl).Result;
 
-            return httpResponse;
+            using (var httpRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(_baseAddress, fullUrl)))
+            {
+                httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                return _httpClient.SendAsync(httpRequest).Result;
+            }
         }
 
         protected TResponse UploadFile<TRequest, TResponse>(TRequest request, Stream fileStream, string fileName, string endpoint)
@@ -93,19 +93,25 @@ namespace GIDX.SDK
         {
             SetCredentials(request);
 
-            var requestContent = new MultipartFormDataContent();
+            using (var httpRequest = new HttpRequestMessage(HttpMethod.Post, new Uri(_baseAddress, endpoint)))
+            {
+                httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var fileContent = new StreamContent(fileStream);
-            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
-            requestContent.Add(fileContent, "file", fileName);
-            
-            string requestJson = ToJson(request);
-            var jsonContent = new StringContent(requestJson);
-            requestContent.Add(jsonContent, "json");
+                var requestContent = new MultipartFormDataContent();
 
-            var httpResponse = _httpClient.PostAsync(endpoint, requestContent).Result;
+                var fileContent = new StreamContent(fileStream);
+                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+                requestContent.Add(fileContent, "file", fileName);
 
-            return LoadResponse<TResponse>(httpResponse);
+                string requestJson = ToJson(request);
+                var jsonContent = new StringContent(requestJson);
+                requestContent.Add(jsonContent, "json");
+
+                httpRequest.Content = requestContent;
+                var httpResponse = _httpClient.SendAsync(httpRequest).Result;
+
+                return LoadResponse<TResponse>(httpResponse);
+            }
         }
 
         protected TResponse LoadResponse<TResponse>(HttpResponseMessage httpResponse)

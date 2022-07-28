@@ -16,6 +16,7 @@ namespace GIDX.SDK
         private const string DefaultVersion = "v3.0";
 
         private Uri _baseAddress;
+        private HttpClient _httpClient;
 
         /// <summary>
         /// Default credentials to use when sending requests.  Credentials can be overridden on the request objects themselves.
@@ -27,9 +28,20 @@ namespace GIDX.SDK
         /// </summary>
         /// <param name="credentials"></param>
         public GIDXClient(MerchantCredentials credentials)
-            : this(credentials, DefaultDomain, DefaultVersion)
+            : this(credentials, DefaultDomain, DefaultVersion, null)
         {
             
+        }
+
+        /// <summary>
+        /// Initializes a client that will use the testing endpoint.
+        /// </summary>
+        /// <param name="credentials"></param>
+        /// <param name="httpClient">An HttpClient to use for HTTP requests.</param>
+        public GIDXClient(MerchantCredentials credentials, HttpClient httpClient)
+            : this(credentials, DefaultDomain, DefaultVersion, httpClient)
+        {
+
         }
 
         /// <summary>
@@ -39,23 +51,43 @@ namespace GIDX.SDK
         /// <param name="domain">The domain of the endpoint (ex: "https://api.gidx-service.in").</param>
         /// <param name="version">The API version number you want to use.</param>
         public GIDXClient(MerchantCredentials credentials, string domain, string version)
+            : this(credentials, domain, version, null)
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a client that will use the domain and version provided instead of the testing endpoint.
+        /// </summary>
+        /// <param name="credentials"></param>
+        /// <param name="domain">The domain of the endpoint (ex: "https://api.gidx-service.in").</param>
+        /// <param name="version">The API version number you want to use.</param>
+        /// <param name="httpClient">An HttpClient to use for HTTP requests.</param>
+        public GIDXClient(MerchantCredentials credentials, string domain, string version, HttpClient httpClient)
         {
             if (version[0] != 'v')
                 version = "v" + version;
 
             var path = string.Format("/{0}/api/", version);
-            Init(credentials, new Uri(new Uri(domain), path));
+            Init(credentials, new Uri(new Uri(domain), path), httpClient);
         }
 
-        public GIDXClient(MerchantCredentials credentials, string baseAddress)
+        /// <summary>
+        /// Initializes a client that will use the base address provided instead of concatenating the domain and version.
+        /// </summary>
+        /// <param name="credentials"></param>
+        /// <param name="baseAddress">The base address of the endpoint (ex: "https://api.gidx-service.in/v3.0/api/")</param>
+        /// <param name="httpClient">An HttpClient to use for HTTP requests.</param>
+        public GIDXClient(MerchantCredentials credentials, string baseAddress, HttpClient httpClient)
         {
-            Init(credentials, new Uri(baseAddress));
+            Init(credentials, new Uri(baseAddress), httpClient);
         }
 
-        private void Init(MerchantCredentials credentials, Uri baseAddress)
+        private void Init(MerchantCredentials credentials, Uri baseAddress, HttpClient httpClient)
         {
             Credentials = credentials;
             _baseAddress = baseAddress;
+            _httpClient = _httpClient ?? new HttpClient();
         }
 
         #region Child Client Properties
@@ -66,7 +98,7 @@ namespace GIDX.SDK
             get
             {
                 if (_customerIdentity == null)
-                    _customerIdentity = new CustomerIdentityClient(Credentials, _baseAddress);
+                    _customerIdentity = new CustomerIdentityClient(Credentials, _baseAddress, _httpClient);
                 return _customerIdentity;
             }
         }
@@ -77,7 +109,7 @@ namespace GIDX.SDK
             get
             {
                 if (_documentLibrary == null)
-                    _documentLibrary = new DocumentLibraryClient(Credentials, _baseAddress);
+                    _documentLibrary = new DocumentLibraryClient(Credentials, _baseAddress, _httpClient);
                 return _documentLibrary;
             }
         }
@@ -88,7 +120,7 @@ namespace GIDX.SDK
             get
             {
                 if (_webCashier == null)
-                    _webCashier = new WebCashierClient(Credentials, _baseAddress);
+                    _webCashier = new WebCashierClient(Credentials, _baseAddress, _httpClient);
                 return _webCashier;
             }
         }
@@ -99,7 +131,7 @@ namespace GIDX.SDK
             get
             {
                 if (_webMyAccount == null)
-                    _webMyAccount = new WebMyAccountClient(Credentials, _baseAddress);
+                    _webMyAccount = new WebMyAccountClient(Credentials, _baseAddress, _httpClient);
                 return _webMyAccount;
             }
         }
@@ -110,7 +142,7 @@ namespace GIDX.SDK
             get
             {
                 if (_webReg == null)
-                    _webReg = new WebRegClient(Credentials, _baseAddress);
+                    _webReg = new WebRegClient(Credentials, _baseAddress, _httpClient);
                 return _webReg;
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using GIDX.SDK.Models;
@@ -10,8 +11,8 @@ namespace GIDX.SDK
 {
     internal class WebCashierClient : ClientBase, IWebCashierClient
     {
-        public WebCashierClient(MerchantCredentials credentials, Uri baseAddress)
-            : base(credentials, baseAddress, "WebCashier")
+        public WebCashierClient(MerchantCredentials credentials, Uri baseAddress, HttpClient httpClient)
+            : base(credentials, baseAddress, httpClient, "WebCashier")
         {
 
         }

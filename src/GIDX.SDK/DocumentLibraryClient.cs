@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using GIDX.SDK.Models;
@@ -11,8 +12,8 @@ namespace GIDX.SDK
 {
     internal class DocumentLibraryClient : ClientBase, IDocumentLibraryClient
     {
-        public DocumentLibraryClient(MerchantCredentials credentials, Uri baseAddress)
-            : base(credentials, baseAddress, "DocumentLibrary")
+        public DocumentLibraryClient(MerchantCredentials credentials, Uri baseAddress, HttpClient httpClient)
+            : base(credentials, baseAddress, httpClient, "DocumentLibrary")
         {
 
         }
