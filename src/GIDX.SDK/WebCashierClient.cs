@@ -50,15 +50,20 @@ namespace GIDX.SDK
             return SendGetRequest<PaymentDetailRequest, PaymentDetailResponse>(request, "PaymentDetail");
         }
 
-        public PaymentDetailResponse PaymentDetail(string merchantTransactionID)
+        public PaymentDetailResponse PaymentDetail(string merchantSessionID, string merchantTransactionID)
         {
+            if (merchantSessionID == null)
+                throw new ArgumentNullException("merchantTransactionID");
+
             if (merchantTransactionID == null)
                 throw new ArgumentNullException("merchantTransactionID");
 
             var request = new PaymentDetailRequest
             {
+                MerchantSessionID = merchantSessionID,
                 MerchantTransactionID = merchantTransactionID
             };
+
             return PaymentDetail(request);
         }
 

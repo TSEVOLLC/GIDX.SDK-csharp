@@ -9,7 +9,7 @@ namespace GIDX.SDK
         CreateSessionWebWalletResponse CreateSessionWebWallet(CreateSessionWebWalletRequest request);
         SessionStatusCallback ParseCallback(string json);
         PaymentDetailResponse PaymentDetail(PaymentDetailRequest request);
-        PaymentDetailResponse PaymentDetail(string merchantTransactionID);
+        PaymentDetailResponse PaymentDetail(string merchantSessionID, string merchantTransactionID);
         PaymentUpdateResponse PaymentUpdate(PaymentUpdateRequest request);
         PaymentUpdateResponse PaymentUpdate(string merchantTransactionID, PaymentStatusCode paymentStatusCode);
         WebCashierStatusResponse WebCashierStatus(WebCashierStatusRequest request);
