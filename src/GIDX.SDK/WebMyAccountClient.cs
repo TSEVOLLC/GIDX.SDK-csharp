@@ -17,12 +17,12 @@ namespace GIDX.SDK
 
         }
 
-        public CreateSessionResponse CreateSession(CreateSessionRequest request)
+        public async Task<CreateSessionResponse> CreateSessionAsync(CreateSessionRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendPostRequest<CreateSessionRequest, CreateSessionResponse>(request, "CreateSession");
+            return await SendPostRequestAsync<CreateSessionRequest, CreateSessionResponse>(request, "CreateSession");
         }
     }
 }

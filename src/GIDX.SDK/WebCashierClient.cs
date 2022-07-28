@@ -17,20 +17,20 @@ namespace GIDX.SDK
 
         }
 
-        public CreateSessionResponse CreateSession(CreateSessionRequest request)
+        public async Task<CreateSessionResponse> CreateSessionAsync(CreateSessionRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendPostRequest<CreateSessionRequest, CreateSessionResponse>(request, "CreateSession");
+            return await SendPostRequestAsync<CreateSessionRequest, CreateSessionResponse>(request, "CreateSession");
         }
 
-        public CreateSessionWebWalletResponse CreateSessionWebWallet(CreateSessionWebWalletRequest request)
+        public async Task<CreateSessionWebWalletResponse> CreateSessionWebWalletAsync(CreateSessionWebWalletRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendPostRequest<CreateSessionWebWalletRequest, CreateSessionWebWalletResponse>(request, "CreateSessionWebWallet");
+            return await SendPostRequestAsync<CreateSessionWebWalletRequest, CreateSessionWebWalletResponse>(request, "CreateSessionWebWallet");
         }
 
         public SessionStatusCallback ParseCallback(string json)
@@ -43,15 +43,15 @@ namespace GIDX.SDK
 
         #region PaymentDetail
 
-        public PaymentDetailResponse PaymentDetail(PaymentDetailRequest request)
+        public async Task<PaymentDetailResponse> PaymentDetailAsync(PaymentDetailRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendGetRequest<PaymentDetailRequest, PaymentDetailResponse>(request, "PaymentDetail");
+            return await SendGetRequestAsync<PaymentDetailRequest, PaymentDetailResponse>(request, "PaymentDetail");
         }
 
-        public PaymentDetailResponse PaymentDetail(string merchantSessionID, string merchantTransactionID)
+        public Task<PaymentDetailResponse> PaymentDetailAsync(string merchantSessionID, string merchantTransactionID)
         {
             if (merchantSessionID == null)
                 throw new ArgumentNullException("merchantTransactionID");
@@ -65,50 +65,48 @@ namespace GIDX.SDK
                 MerchantTransactionID = merchantTransactionID
             };
 
-            return PaymentDetail(request);
+            return PaymentDetailAsync(request);
         }
 
         #endregion
 
         #region PaymentUpdate
 
-        public PaymentUpdateResponse PaymentUpdate(PaymentUpdateRequest request)
+        public async Task<PaymentUpdateResponse> PaymentUpdateAsync(PaymentUpdateRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendPostRequest<PaymentUpdateRequest, PaymentUpdateResponse>(request, "PaymentUpdate");
+            return await SendPostRequestAsync<PaymentUpdateRequest, PaymentUpdateResponse>(request, "PaymentUpdate");
         }
 
-        public PaymentUpdateResponse PaymentUpdate(string merchantTransactionID, PaymentStatusCode paymentStatusCode)
+        public Task<PaymentUpdateResponse> PaymentUpdateAsync(string merchantTransactionID, PaymentStatusCode paymentStatusCode)
         {
             if (merchantTransactionID == null)
                 throw new ArgumentNullException("merchantTransactionID");
-
-            if (paymentStatusCode == null)
-                throw new ArgumentNullException("paymentStatusCode");
 
             var request = new PaymentUpdateRequest
             {
                 MerchantTransactionID = merchantTransactionID,
                 PaymentStatusCode = paymentStatusCode
             };
-            return PaymentUpdate(request);
+
+            return PaymentUpdateAsync(request);
         }
 
         #endregion
 
         #region WebCashierStatus
 
-        public WebCashierStatusResponse WebCashierStatus(WebCashierStatusRequest request)
+        public async Task<WebCashierStatusResponse> WebCashierStatusAsync(WebCashierStatusRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendGetRequest<WebCashierStatusRequest, WebCashierStatusResponse>(request, "WebCashierStatus");
+            return await SendGetRequestAsync<WebCashierStatusRequest, WebCashierStatusResponse>(request, "WebCashierStatus");
         }
 
-        public WebCashierStatusResponse WebCashierStatus(string merchantSessionID)
+        public Task<WebCashierStatusResponse> WebCashierStatusAsync(string merchantSessionID)
         {
             if (merchantSessionID == null)
                 throw new ArgumentNullException("merchantSessionID");
@@ -117,7 +115,8 @@ namespace GIDX.SDK
             {
                 MerchantSessionID = merchantSessionID
             };
-            return WebCashierStatus(request);
+
+            return WebCashierStatusAsync(request);
         }
 
         #endregion

@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
 using GIDX.SDK.Models.WebReg;
 
 namespace GIDX.SDK
 {
     public interface IWebRegClient
     {
-        CreateSessionResponse CreateSession(CreateSessionRequest request);
-        CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request);
-        CustomerRegistrationResponse CustomerRegistration(string merchantCustomerID);
+        Task<CreateSessionResponse> CreateSessionAsync(CreateSessionRequest request);
+        Task<CustomerRegistrationResponse> CustomerRegistrationAsync(CustomerRegistrationRequest request);
+        Task<CustomerRegistrationResponse> CustomerRegistrationAsync(string merchantCustomerID);
         SessionStatusCallback ParseCallback(string json);
-        RegistrationStatusResponse RegistrationStatus(RegistrationStatusRequest request);
-        RegistrationStatusResponse RegistrationStatus(string merchantSessionID);
+        Task<RegistrationStatusResponse> RegistrationStatusAsync(RegistrationStatusRequest request);
+        Task<RegistrationStatusResponse> RegistrationStatusAsync(string merchantSessionID);
     }
 }

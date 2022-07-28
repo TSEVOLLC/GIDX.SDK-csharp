@@ -19,15 +19,15 @@ namespace GIDX.SDK
 
         #region CustomerMonitor
 
-        public CustomerMonitorResponse CustomerMonitor(CustomerMonitorRequest request)
+        public async Task<CustomerMonitorResponse> CustomerMonitorAsync(CustomerMonitorRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendPostRequest<CustomerMonitorRequest, CustomerMonitorResponse>(request, "CustomerMonitor");
+            return await SendPostRequestAsync<CustomerMonitorRequest, CustomerMonitorResponse>(request, "CustomerMonitor");
         }
 
-        public CustomerMonitorResponse CustomerMonitor(string merchantCustomerID, string merchantSessionID)
+        public Task<CustomerMonitorResponse> CustomerMonitorAsync(string merchantCustomerID, string merchantSessionID)
         {
             if (merchantCustomerID == null)
                 throw new ArgumentNullException("merchantCustomerID");
@@ -37,22 +37,22 @@ namespace GIDX.SDK
                 MerchantCustomerID = merchantCustomerID,
                 MerchantSessionID = merchantSessionID
             };
-            return CustomerMonitor(request);
+            return CustomerMonitorAsync(request);
         }
 
         #endregion
 
         #region CustomerProfile
 
-        public CustomerProfileResponse CustomerProfile(CustomerProfileRequest request)
+        public async Task<CustomerProfileResponse> CustomerProfileAsync(CustomerProfileRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendGetRequest<CustomerProfileRequest, CustomerProfileResponse>(request, "CustomerProfile");
+            return await SendGetRequestAsync<CustomerProfileRequest, CustomerProfileResponse>(request, "CustomerProfile");
         }
 
-        public CustomerProfileResponse CustomerProfile(string merchantCustomerID, string merchantSessionID)
+        public Task<CustomerProfileResponse> CustomerProfileAsync(string merchantCustomerID, string merchantSessionID)
         {
             if (merchantCustomerID == null)
                 throw new ArgumentNullException("merchantCustomerID");
@@ -62,33 +62,33 @@ namespace GIDX.SDK
                 MerchantCustomerID = merchantCustomerID,
                 MerchantSessionID = merchantSessionID
             };
-            return CustomerProfile(request);
+            return CustomerProfileAsync(request);
         }
 
         #endregion
 
-        public CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request)
+        public async Task<CustomerRegistrationResponse> CustomerRegistrationAsync(CustomerRegistrationRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendPostRequest<CustomerRegistrationRequest, CustomerRegistrationResponse>(request, "CustomerRegistration");
+            return await SendPostRequestAsync<CustomerRegistrationRequest, CustomerRegistrationResponse>(request, "CustomerRegistration");
         }
 
-        public LocationResponse Location(LocationRequest request)
+        public async Task<LocationResponse> LocationAsync(LocationRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendPostRequest<LocationRequest, LocationResponse>(request, "Location");
+            return await SendPostRequestAsync<LocationRequest, LocationResponse>(request, "Location");
         }
 
-        public RemoveCustomerResponse RemoveCustomer(RemoveCustomerRequest request)
+        public async Task<RemoveCustomerResponse> RemoveCustomerAsync(RemoveCustomerRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendPostRequest<RemoveCustomerRequest, RemoveCustomerResponse>(request, "RemoveCustomer");
+            return await SendPostRequestAsync<RemoveCustomerRequest, RemoveCustomerResponse>(request, "RemoveCustomer");
         }
     }
 }

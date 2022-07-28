@@ -46,7 +46,7 @@ namespace GIDX.SDK
             _jsonSerializer = JsonSerializer.Create();
         }
 
-        protected TResponse SendPostRequest<TRequest, TResponse>(TRequest request, string endpoint)
+        protected async Task<TResponse> SendPostRequestAsync<TRequest, TResponse>(TRequest request, string endpoint)
             where TRequest : RequestBase
             where TResponse : ResponseBase, new()
         {
@@ -58,21 +58,21 @@ namespace GIDX.SDK
             {
                 httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 httpRequest.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-                var httpResponse = _httpClient.SendAsync(httpRequest).Result;
+                var httpResponse = await _httpClient.SendAsync(httpRequest);
 
-                return LoadResponse<TResponse>(httpResponse);
+                return await LoadResponseAsync<TResponse>(httpResponse);
             }
         }
 
-        protected TResponse SendGetRequest<TRequest, TResponse>(TRequest request, string endpoint)
+        protected async Task<TResponse> SendGetRequestAsync<TRequest, TResponse>(TRequest request, string endpoint)
             where TRequest : RequestBase
             where TResponse : ResponseBase, new()
         {
-            var httpResponse = SendGetRequest<TRequest>(request, endpoint);
-            return LoadResponse<TResponse>(httpResponse);
+            var httpResponse = await SendGetRequestAsync<TRequest>(request, endpoint);
+            return await LoadResponseAsync<TResponse>(httpResponse);
         }
 
-        protected HttpResponseMessage SendGetRequest<TRequest>(TRequest request, string endpoint)
+        protected Task<HttpResponseMessage> SendGetRequestAsync<TRequest>(TRequest request, string endpoint)
             where TRequest : RequestBase
         {
             SetCredentials(request);
@@ -83,11 +83,11 @@ namespace GIDX.SDK
             using (var httpRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(_baseAddress, fullUrl)))
             {
                 httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                return _httpClient.SendAsync(httpRequest).Result;
+                return _httpClient.SendAsync(httpRequest);
             }
         }
 
-        protected TResponse UploadFile<TRequest, TResponse>(TRequest request, Stream fileStream, string fileName, string endpoint)
+        protected async Task<TResponse> UploadFileAsync<TRequest, TResponse>(TRequest request, Stream fileStream, string fileName, string endpoint)
             where TRequest : RequestBase
             where TResponse : ResponseBase, new()
         {
@@ -108,20 +108,20 @@ namespace GIDX.SDK
                 requestContent.Add(jsonContent, "json");
 
                 httpRequest.Content = requestContent;
-                var httpResponse = _httpClient.SendAsync(httpRequest).Result;
+                var httpResponse = await _httpClient.SendAsync(httpRequest);
 
-                return LoadResponse<TResponse>(httpResponse);
+                return await LoadResponseAsync<TResponse>(httpResponse);
             }
         }
 
-        protected TResponse LoadResponse<TResponse>(HttpResponseMessage httpResponse)
+        protected async Task<TResponse> LoadResponseAsync<TResponse>(HttpResponseMessage httpResponse)
             where TResponse : ResponseBase, new()
         {
             TResponse response;
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                var responseJson = httpResponse.Content.ReadAsStringAsync().Result;
+                var responseJson = await httpResponse.Content.ReadAsStringAsync();
                 response = FromJson<TResponse>(responseJson);
             }
             else

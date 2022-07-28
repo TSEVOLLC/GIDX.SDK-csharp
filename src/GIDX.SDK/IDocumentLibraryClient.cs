@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using GIDX.SDK.Models.DocumentLibrary;
 
 namespace GIDX.SDK
@@ -14,7 +15,7 @@ namespace GIDX.SDK
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        CustomerDocumentsResponse CustomerDocuments(CustomerDocumentsRequest request);
+        Task<CustomerDocumentsResponse> CustomerDocumentsAsync(CustomerDocumentsRequest request);
 
         /// <summary>
         /// Make a request to our CustomerDocuments endpoint to get a list of uploaded documents attached to a customer.
@@ -22,7 +23,7 @@ namespace GIDX.SDK
         /// <param name="merchantCustomerID"></param>
         /// <param name="merchantSessionID">Required.  Used for logging purposes.</param>
         /// <returns></returns>
-        CustomerDocumentsResponse CustomerDocuments(string merchantCustomerID, string merchantSessionID);
+        Task<CustomerDocumentsResponse> CustomerDocumentsAsync(string merchantCustomerID, string merchantSessionID);
 
         /// <summary>
         /// Make a request to our DocumentRegistration endpoint to upload a document and attach it to a MerchantCustomerID.
@@ -31,7 +32,7 @@ namespace GIDX.SDK
         /// <param name="fileStream">A stream of the file to upload</param>
         /// <param name="fileName">The name of the file to upload</param>
         /// <returns></returns>
-        DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, Stream fileStream, string fileName);
+        Task<DocumentRegistrationResponse> DocumentRegistrationAsync(DocumentRegistrationRequest request, Stream fileStream, string fileName);
 
         /// <summary>
         /// Make a request to our DocumentRegistration endpoint to upload a document and attach it to a MerchantCustomerID.
@@ -39,14 +40,14 @@ namespace GIDX.SDK
         /// <param name="request"></param>
         /// <param name="filePath">The local file path of the file to upload</param>
         /// <returns></returns>
-        DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, string filePath);
+        Task<DocumentRegistrationResponse> DocumentRegistrationAsync(DocumentRegistrationRequest request, string filePath);
 
         /// <summary>
         /// Make a request to our DownloadDocument endpoint to download a file that was previously uploaded.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        DownloadDocumentResponse DownloadDocument(DownloadDocumentRequest request);
+        Task<DownloadDocumentResponse> DownloadDocumentAsync(DownloadDocumentRequest request);
 
         /// <summary>
         /// Make a request to our DownloadDocument endpoint to download a file that was previously uploaded.
@@ -54,6 +55,6 @@ namespace GIDX.SDK
         /// <param name="documentID">The DocumentID of the file.  It is returned in the <see cref="Document"/> object from the DocumentRegistration and CustomerDocuments methods.</param>
         /// <param name="merchantSessionID">Required.  Used for logging purposes.</param>
         /// <returns></returns>
-        DownloadDocumentResponse DownloadDocument(string documentID, string merchantSessionID);
+        Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentID, string merchantSessionID);
     }
 }
