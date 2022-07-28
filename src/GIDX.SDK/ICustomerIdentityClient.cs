@@ -51,5 +51,12 @@ namespace GIDX.SDK
         /// <param name="request"></param>
         /// <returns></returns>
         LocationResponse Location(LocationRequest request);
+
+        /// <summary>
+        /// Make a request to our RemoveCustomer endpoint.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        RemoveCustomerResponse RemoveCustomer(RemoveCustomerRequest request);
     }
 }
