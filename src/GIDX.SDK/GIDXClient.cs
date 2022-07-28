@@ -13,7 +13,7 @@ namespace GIDX.SDK
     public class GIDXClient : IGIDXClient
     {
         private const string DefaultDomain = "https://api.gidx-service.in";
-        private const string DefaultVersion = "v2.01";
+        private const string DefaultVersion = "v3.0";
 
         private Uri _baseAddress;
 
