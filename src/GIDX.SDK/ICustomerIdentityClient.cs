@@ -46,6 +46,13 @@ namespace GIDX.SDK
         CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request);
 
         /// <summary>
+        /// Make a request to our CustomerUpdate endpoint.
+        /// </summary>
+        /// <param name="request">The <see cref="Models.MerchantCredentials"/> fields on the request will default to the values in the client's <see cref="Credentials"/> property, but can be overridden if manually set on the <paramref name="request"/>.</param>
+        /// <returns></returns>
+        CustomerUpdateResponse CustomerUpdate(CustomerUpdateRequest request);
+
+        /// <summary>
         /// Make a request to our Location endpoint.
         /// </summary>
         /// <param name="request"></param>

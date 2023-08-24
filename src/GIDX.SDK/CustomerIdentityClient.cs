@@ -74,6 +74,14 @@ namespace GIDX.SDK
             return SendPostRequest<CustomerRegistrationRequest, CustomerRegistrationResponse>(request, "CustomerRegistration");
         }
 
+        public CustomerUpdateResponse CustomerUpdate(CustomerUpdateRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            return SendPostRequest<CustomerUpdateRequest, CustomerUpdateResponse>(request, "CustomerUpdate");
+        }
+
         public LocationResponse Location(LocationRequest request)
         {
             if (request == null)
