@@ -75,6 +75,14 @@ namespace GIDX.SDK
             return await SendPostRequestAsync<CustomerRegistrationRequest, CustomerRegistrationResponse>(request, "CustomerRegistration");
         }
 
+        public async Task<CustomerUpdateResponse> CustomerUpdateAsync(CustomerUpdateRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            return await SendPostRequestAsync<CustomerUpdateRequest, CustomerUpdateResponse>(request, "CustomerUpdate");
+        }
+
         public async Task<LocationResponse> LocationAsync(LocationRequest request)
         {
             if (request == null)
