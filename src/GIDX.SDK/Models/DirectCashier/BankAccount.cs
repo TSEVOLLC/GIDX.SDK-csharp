@@ -10,5 +10,10 @@ namespace GIDX.SDK.Models.DirectCashier
 
         public string AccountNumber { get; set; }
         public string RoutingNumber { get; set; }
+
+        /// <summary>
+        /// BankName will be populated by GIDX based on <see cref="RoutingNumber"/>
+        /// </summary>
+        public string BankName { get; set; }
     }
 }
