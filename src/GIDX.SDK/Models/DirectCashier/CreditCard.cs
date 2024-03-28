@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 
 namespace GIDX.SDK.Models.DirectCashier
 {
@@ -12,6 +13,10 @@ namespace GIDX.SDK.Models.DirectCashier
 
         public string CardNumber { get; set; }
         public string CVV { get; set; }
+
+        /// <summary>
+        /// Either MM/yy or MM/yyyy formatted date.
+        /// </summary>
         public string ExpirationDate { get; set; }
         public string Network { get; set; }
 
@@ -41,5 +46,33 @@ namespace GIDX.SDK.Models.DirectCashier
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public CreditCardCVVResult CVVResult { get; set; }
+
+        public void SetExpirationDate(DateTime expirationDate)
+        {
+            ExpirationDate = expirationDate.ToString("MM/yyyy");
+        }
+
+        public DateTime ParseExpirationDate()
+        {
+            if (string.IsNullOrWhiteSpace(ExpirationDate))
+                return DateTime.MinValue;
+
+            DateTime date;
+            if (DateTime.TryParseExact(ExpirationDate, "MM/yy", CultureInfo.CurrentCulture, DateTimeStyles.None, out date))
+            {
+                //If they didn't pass the full year, make sure its translated to a future year (ie 12/30 should be 12/2030, not 12/1930).
+                var thisYear = DateTime.UtcNow.Year;
+                if (date.Year < thisYear)
+                    date.AddYears(100);
+                return date;
+            }
+            else if (DateTime.TryParseExact(ExpirationDate, "MM/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out date)
+                || DateTime.TryParse(ExpirationDate, out date))
+            {
+                return date;
+            }
+
+            return DateTime.MinValue;
+        }
     }
 }
