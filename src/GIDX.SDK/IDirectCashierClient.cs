@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
 using GIDX.SDK.Models;
-using GIDX.SDK.Models.WebCashier;
+using GIDX.SDK.Models.DirectCashier;
 
 namespace GIDX.SDK
 {
-    public interface IWebCashierClient
+    public interface IDirectCashierClient
     {
         Task<CreateSessionResponse> CreateSessionAsync(CreateSessionRequest request);
-        Task<CreateSessionWebWalletResponse> CreateSessionWebWalletAsync(CreateSessionWebWalletRequest request);
+        Task<CompleteSessionResponse> CompleteSessionAsync(CompleteSessionRequest request);
         SessionStatusCallback ParseCallback(string json);
         Task<PaymentDetailResponse> PaymentDetailAsync(PaymentDetailRequest request);
         Task<PaymentDetailResponse> PaymentDetailAsync(string merchantSessionID, string merchantTransactionID);
         Task<PaymentUpdateResponse> PaymentUpdateAsync(PaymentUpdateRequest request);
         Task<PaymentUpdateResponse> PaymentUpdateAsync(string merchantTransactionID, PaymentStatusCode paymentStatusCode);
-        Task<WebCashierStatusResponse> WebCashierStatusAsync(WebCashierStatusRequest request);
-        Task<WebCashierStatusResponse> WebCashierStatusAsync(string merchantSessionID);
+        Task<SavePaymentMethodResponse> SavePaymentMethodAsync(SavePaymentMethodRequest request);
     }
 }

@@ -103,6 +103,17 @@ namespace GIDX.SDK
             }
         }
 
+        private IDirectCashierClient _directCashier;
+        public IDirectCashierClient DirectCashier
+        {
+            get
+            {
+                if (_directCashier == null)
+                    _directCashier = new DirectCashierClient(Credentials, _baseAddress, _httpClient);
+                return _directCashier;
+            }
+        }
+
         private IDocumentLibraryClient _documentLibrary;
         public IDocumentLibraryClient DocumentLibrary
         {
