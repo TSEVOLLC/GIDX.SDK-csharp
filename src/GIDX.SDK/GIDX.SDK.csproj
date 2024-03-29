@@ -6,13 +6,14 @@
     <RestorePackages>true</RestorePackages>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <VersionPrefix>3.0.1</VersionPrefix>
+    <VersionPrefix>3.0.1-alpha</VersionPrefix>
     <Company>TSEVO, LLC</Company>
     <Description>An SDK for accessing the GIDX API services.</Description>
     <PackageProjectUrl>https://github.com/TSEVOLLC/GIDX.SDK-csharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/TSEVOLLC/GIDX.SDK-csharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression> MIT-Modern-Variant</PackageLicenseExpression>
+    <Title>GIDX SDK</Title>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DocumentationFile>bin\Debug\GIDX.SDK.xml</DocumentationFile>
