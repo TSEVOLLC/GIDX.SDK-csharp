@@ -58,20 +58,13 @@ namespace GIDX.SDK.Models.DirectCashier
                 return DateTime.MinValue;
 
             DateTime date;
-            if (DateTime.TryParseExact(ExpirationDate, "MM/yy", CultureInfo.CurrentCulture, DateTimeStyles.None, out date))
-            {
-                //If they didn't pass the full year, make sure its translated to a future year (ie 12/30 should be 12/2030, not 12/1930).
-                var thisYear = DateTime.UtcNow.Year;
-                if (date.Year < thisYear)
-                    date.AddYears(100);
-                return date;
-            }
-            else if (DateTime.TryParseExact(ExpirationDate, "MM/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out date)
+            var formats = new []{ "MM/yy", "MM/yyyy" };
+            if (DateTime.TryParseExact(ExpirationDate, formats, CultureInfo.CurrentCulture, DateTimeStyles.None, out date)
                 || DateTime.TryParse(ExpirationDate, out date))
             {
                 return date;
             }
-
+            
             return DateTime.MinValue;
         }
     }
