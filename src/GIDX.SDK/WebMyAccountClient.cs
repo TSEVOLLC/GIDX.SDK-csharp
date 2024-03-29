@@ -11,8 +11,8 @@ namespace GIDX.SDK
 {
     internal class WebMyAccountClient : ClientBase, IWebMyAccountClient
     {
-        public WebMyAccountClient(MerchantCredentials credentials, Uri baseAddress, HttpClient httpClient)
-            : base(credentials, baseAddress, httpClient, "WebMyAccount")
+        public WebMyAccountClient(MerchantCredentials credentials, Uri baseAddress, Func<HttpClient> getHttpClient)
+            : base(credentials, baseAddress, getHttpClient, "WebMyAccount")
         {
 
         }

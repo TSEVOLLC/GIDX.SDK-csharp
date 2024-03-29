@@ -11,8 +11,8 @@ namespace GIDX.SDK
 {
     internal class WebCashierClient : ClientBase, IWebCashierClient
     {
-        public WebCashierClient(MerchantCredentials credentials, Uri baseAddress, HttpClient httpClient)
-            : base(credentials, baseAddress, httpClient, "WebCashier")
+        public WebCashierClient(MerchantCredentials credentials, Uri baseAddress, Func<HttpClient> getHttpClient)
+            : base(credentials, baseAddress, getHttpClient, "WebCashier")
         {
 
         }

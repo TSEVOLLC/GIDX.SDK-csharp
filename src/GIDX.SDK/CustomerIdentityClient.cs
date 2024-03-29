@@ -11,8 +11,8 @@ namespace GIDX.SDK
 {
     internal class CustomerIdentityClient : ClientBase, ICustomerIdentityClient
     {
-        public CustomerIdentityClient(MerchantCredentials credentials, Uri baseAddress, HttpClient httpClient)
-            : base(credentials, baseAddress, httpClient, "CustomerIdentity")
+        public CustomerIdentityClient(MerchantCredentials credentials, Uri baseAddress, Func<HttpClient> getHttpClient)
+            : base(credentials, baseAddress, getHttpClient, "CustomerIdentity")
         {
 
         }

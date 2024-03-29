@@ -11,8 +11,8 @@ namespace GIDX.SDK
 {
     internal class DirectCashierClient : ClientBase, IDirectCashierClient
     {
-        public DirectCashierClient(MerchantCredentials credentials, Uri baseAddress, HttpClient httpClient)
-            : base(credentials, baseAddress, httpClient, "DirectCashier")
+        public DirectCashierClient(MerchantCredentials credentials, Uri baseAddress, Func<HttpClient> getHttpClient)
+            : base(credentials, baseAddress, getHttpClient, "DirectCashier")
         {
 
         }

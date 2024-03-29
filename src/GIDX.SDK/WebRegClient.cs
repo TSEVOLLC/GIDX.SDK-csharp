@@ -11,8 +11,8 @@ namespace GIDX.SDK
 {
     internal class WebRegClient : ClientBase, IWebRegClient
     {
-        public WebRegClient(MerchantCredentials credentials, Uri baseAddress, HttpClient httpClient)
-            : base(credentials, baseAddress, httpClient, "WebReg")
+        public WebRegClient(MerchantCredentials credentials, Uri baseAddress, Func<HttpClient> getHttpClient)
+            : base(credentials, baseAddress, getHttpClient, "WebReg")
         {
 
         }

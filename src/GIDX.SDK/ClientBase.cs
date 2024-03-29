@@ -18,13 +18,13 @@ namespace GIDX.SDK
     /// </summary>
     internal abstract class ClientBase
     {
-        protected readonly HttpClient _httpClient;
+        protected readonly Func<HttpClient> _getHttpClient;
         private readonly JsonSerializer _jsonSerializer;
         private readonly Uri _baseAddress;
 
         public MerchantCredentials Credentials { get; set; }
 
-        protected ClientBase(MerchantCredentials credentials, Uri baseAddress, HttpClient httpClient, string service)
+        protected ClientBase(MerchantCredentials credentials, Uri baseAddress, Func<HttpClient> getHttpClient, string service)
         {
             Credentials = credentials;
 
@@ -40,7 +40,7 @@ namespace GIDX.SDK
                 _baseAddress = new Uri(_baseAddress.AbsoluteUri + "/");
             }
 
-            _httpClient = httpClient;
+            _getHttpClient = getHttpClient;
 
             //Creating a JsonSerializer instead of using JsonConvert because we don't want to use any default settings set by the application
             _jsonSerializer = JsonSerializer.Create();
@@ -58,7 +58,9 @@ namespace GIDX.SDK
             {
                 httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 httpRequest.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-                var httpResponse = await _httpClient.SendAsync(httpRequest);
+
+                var httpClient = _getHttpClient();
+                var httpResponse = await httpClient.SendAsync(httpRequest);
 
                 return await LoadResponseAsync<TResponse>(httpResponse);
             }
@@ -83,7 +85,9 @@ namespace GIDX.SDK
             using (var httpRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(_baseAddress, fullUrl)))
             {
                 httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                return _httpClient.SendAsync(httpRequest);
+
+                var httpClient = _getHttpClient();
+                return httpClient.SendAsync(httpRequest);
             }
         }
 
@@ -106,9 +110,10 @@ namespace GIDX.SDK
                 string requestJson = ToJson(request);
                 var jsonContent = new StringContent(requestJson);
                 requestContent.Add(jsonContent, "json");
-
                 httpRequest.Content = requestContent;
-                var httpResponse = await _httpClient.SendAsync(httpRequest);
+
+                var httpClient = _getHttpClient();
+                var httpResponse = await httpClient.SendAsync(httpRequest);
 
                 return await LoadResponseAsync<TResponse>(httpResponse);
             }

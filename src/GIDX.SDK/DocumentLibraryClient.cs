@@ -12,8 +12,8 @@ namespace GIDX.SDK
 {
     internal class DocumentLibraryClient : ClientBase, IDocumentLibraryClient
     {
-        public DocumentLibraryClient(MerchantCredentials credentials, Uri baseAddress, HttpClient httpClient)
-            : base(credentials, baseAddress, httpClient, "DocumentLibrary")
+        public DocumentLibraryClient(MerchantCredentials credentials, Uri baseAddress, Func<HttpClient> getHttpClient)
+            : base(credentials, baseAddress, getHttpClient, "DocumentLibrary")
         {
 
         }
