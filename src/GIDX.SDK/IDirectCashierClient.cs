@@ -15,5 +15,17 @@ namespace GIDX.SDK
         Task<PaymentUpdateResponse> PaymentUpdateAsync(PaymentUpdateRequest request);
         Task<PaymentUpdateResponse> PaymentUpdateAsync(string merchantTransactionID, PaymentStatusCode paymentStatusCode);
         Task<SavePaymentMethodResponse> SavePaymentMethodAsync(SavePaymentMethodRequest request);
+
+        #region Legacy non-async methods
+
+        CreateSessionResponse CreateSession(CreateSessionRequest request);
+        CompleteSessionResponse CompleteSession(CompleteSessionRequest request);
+        PaymentDetailResponse PaymentDetail(PaymentDetailRequest request);
+        PaymentDetailResponse PaymentDetail(string merchantSessionID, string merchantTransactionID);
+        PaymentUpdateResponse PaymentUpdate(PaymentUpdateRequest request);
+        PaymentUpdateResponse PaymentUpdate(string merchantTransactionID, PaymentStatusCode paymentStatusCode);
+        SavePaymentMethodResponse SavePaymentMethod(SavePaymentMethodRequest request);
+
+        #endregion
     }
 }

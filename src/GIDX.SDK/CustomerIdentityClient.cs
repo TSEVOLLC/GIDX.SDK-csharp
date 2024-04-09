@@ -40,6 +40,16 @@ namespace GIDX.SDK
             return CustomerMonitorAsync(request);
         }
 
+        public CustomerMonitorResponse CustomerMonitor(CustomerMonitorRequest request)
+        {
+            return CustomerMonitorAsync(request).Result;
+        }
+
+        public CustomerMonitorResponse CustomerMonitor(string merchantCustomerID, string merchantSessionID)
+        {
+            return CustomerMonitorAsync(merchantCustomerID, merchantSessionID).Result;
+        }
+
         #endregion
 
         #region CustomerProfile
@@ -65,6 +75,16 @@ namespace GIDX.SDK
             return CustomerProfileAsync(request);
         }
 
+        public CustomerProfileResponse CustomerProfile(CustomerProfileRequest request)
+        {
+            return CustomerProfileAsync(request).Result;
+        }
+
+        public CustomerProfileResponse CustomerProfile(string merchantCustomerID, string merchantSessionID)
+        {
+            return CustomerProfileAsync(merchantCustomerID, merchantSessionID).Result;
+        }
+
         #endregion
 
         public async Task<CustomerRegistrationResponse> CustomerRegistrationAsync(CustomerRegistrationRequest request)
@@ -75,12 +95,22 @@ namespace GIDX.SDK
             return await SendPostRequestAsync<CustomerRegistrationRequest, CustomerRegistrationResponse>(request, "CustomerRegistration");
         }
 
+        public CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request)
+        {
+            return CustomerRegistrationAsync(request).Result;
+        }
+
         public async Task<CustomerUpdateResponse> CustomerUpdateAsync(CustomerUpdateRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
             return await SendPostRequestAsync<CustomerUpdateRequest, CustomerUpdateResponse>(request, "CustomerUpdate");
+        }
+
+        public CustomerUpdateResponse CustomerUpdate(CustomerUpdateRequest request)
+        {
+            return CustomerUpdateAsync(request).Result;
         }
 
         public async Task<LocationResponse> LocationAsync(LocationRequest request)
@@ -91,12 +121,22 @@ namespace GIDX.SDK
             return await SendPostRequestAsync<LocationRequest, LocationResponse>(request, "Location");
         }
 
+        public LocationResponse Location(LocationRequest request)
+        {
+            return LocationAsync(request).Result;
+        }
+
         public async Task<RemoveCustomerResponse> RemoveCustomerAsync(RemoveCustomerRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
             return await SendPostRequestAsync<RemoveCustomerRequest, RemoveCustomerResponse>(request, "RemoveCustomer");
+        }
+
+        public RemoveCustomerResponse RemoveCustomer(RemoveCustomerRequest request)
+        {
+            return RemoveCustomerAsync(request).Result;
         }
     }
 }

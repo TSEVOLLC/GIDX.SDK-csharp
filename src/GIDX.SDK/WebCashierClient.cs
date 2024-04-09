@@ -25,12 +25,22 @@ namespace GIDX.SDK
             return await SendPostRequestAsync<CreateSessionRequest, CreateSessionResponse>(request, "CreateSession");
         }
 
+        public CreateSessionResponse CreateSession(CreateSessionRequest request)
+        {
+            return CreateSessionAsync(request).Result;
+        }
+
         public async Task<CreateSessionWebWalletResponse> CreateSessionWebWalletAsync(CreateSessionWebWalletRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
             return await SendPostRequestAsync<CreateSessionWebWalletRequest, CreateSessionWebWalletResponse>(request, "CreateSessionWebWallet");
+        }
+
+        public CreateSessionWebWalletResponse CreateSessionWebWallet(CreateSessionWebWalletRequest request)
+        {
+            return CreateSessionWebWalletAsync(request).Result;
         }
 
         public SessionStatusCallback ParseCallback(string json)
@@ -68,6 +78,16 @@ namespace GIDX.SDK
             return PaymentDetailAsync(request);
         }
 
+        public PaymentDetailResponse PaymentDetail(PaymentDetailRequest request)
+        {
+            return PaymentDetailAsync(request).Result;
+        }
+
+        public PaymentDetailResponse PaymentDetail(string merchantSessionID, string merchantTransactionID)
+        {
+            return PaymentDetailAsync(merchantSessionID, merchantTransactionID).Result;
+        }
+
         #endregion
 
         #region PaymentUpdate
@@ -94,6 +114,16 @@ namespace GIDX.SDK
             return PaymentUpdateAsync(request);
         }
 
+        public PaymentUpdateResponse PaymentUpdate(PaymentUpdateRequest request)
+        {
+            return PaymentUpdateAsync(request).Result;
+        }
+
+        public PaymentUpdateResponse PaymentUpdate(string merchantTransactionID, PaymentStatusCode paymentStatusCode)
+        {
+            return PaymentUpdateAsync(merchantTransactionID, paymentStatusCode).Result;
+        }
+
         #endregion
 
         #region WebCashierStatus
@@ -117,6 +147,16 @@ namespace GIDX.SDK
             };
 
             return WebCashierStatusAsync(request);
+        }
+
+        public WebCashierStatusResponse WebCashierStatus(WebCashierStatusRequest request)
+        {
+            return WebCashierStatusAsync(request).Result;
+        }
+
+        public WebCashierStatusResponse WebCashierStatus(string merchantSessionID)
+        {
+            return WebCashierStatusAsync(merchantSessionID).Result;
         }
 
         #endregion

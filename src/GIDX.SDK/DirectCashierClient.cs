@@ -25,12 +25,22 @@ namespace GIDX.SDK
             return await SendPostRequestAsync<CreateSessionRequest, CreateSessionResponse>(request, "CreateSession");
         }
 
+        public CreateSessionResponse CreateSession(CreateSessionRequest request)
+        {
+            return CreateSessionAsync(request).Result;
+        }
+
         public async Task<CompleteSessionResponse> CompleteSessionAsync(CompleteSessionRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
             return await SendPostRequestAsync<CompleteSessionRequest, CompleteSessionResponse>(request, "CompleteSession");
+        }
+
+        public CompleteSessionResponse CompleteSession(CompleteSessionRequest request)
+        {
+            return CompleteSessionAsync(request).Result;
         }
 
         public SessionStatusCallback ParseCallback(string json)
@@ -68,6 +78,16 @@ namespace GIDX.SDK
             return PaymentDetailAsync(request);
         }
 
+        public PaymentDetailResponse PaymentDetail(PaymentDetailRequest request)
+        {
+            return PaymentDetailAsync(request).Result;
+        }
+
+        public PaymentDetailResponse PaymentDetail(string merchantSessionID, string merchantTransactionID)
+        {
+            return PaymentDetailAsync(merchantSessionID, merchantTransactionID).Result;
+        }
+
         #endregion
 
         #region PaymentUpdate
@@ -94,6 +114,16 @@ namespace GIDX.SDK
             return PaymentUpdateAsync(request);
         }
 
+        public PaymentUpdateResponse PaymentUpdate(PaymentUpdateRequest request)
+        {
+            return PaymentUpdateAsync(request).Result;
+        }
+
+        public PaymentUpdateResponse PaymentUpdate(string merchantTransactionID, PaymentStatusCode paymentStatusCode)
+        {
+            return PaymentUpdateAsync(merchantTransactionID, paymentStatusCode).Result;
+        }
+
         #endregion
 
         public async Task<SavePaymentMethodResponse> SavePaymentMethodAsync(SavePaymentMethodRequest request)
@@ -102,6 +132,11 @@ namespace GIDX.SDK
                 throw new ArgumentNullException("request");
 
             return await SendPostRequestAsync<SavePaymentMethodRequest, SavePaymentMethodResponse>(request, "PaymentMethod");
+        }
+
+        public SavePaymentMethodResponse SavePaymentMethod(SavePaymentMethodRequest request)
+        {
+            return SavePaymentMethodAsync(request).Result;
         }
     }
 }

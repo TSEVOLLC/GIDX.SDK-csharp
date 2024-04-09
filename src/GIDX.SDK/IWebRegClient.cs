@@ -12,5 +12,15 @@ namespace GIDX.SDK
         SessionStatusCallback ParseCallback(string json);
         Task<RegistrationStatusResponse> RegistrationStatusAsync(RegistrationStatusRequest request);
         Task<RegistrationStatusResponse> RegistrationStatusAsync(string merchantSessionID);
+
+        #region Legacy non-async methods
+
+        CreateSessionResponse CreateSession(CreateSessionRequest request);
+        CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request);
+        CustomerRegistrationResponse CustomerRegistration(string merchantCustomerID);
+        RegistrationStatusResponse RegistrationStatus(RegistrationStatusRequest request);
+        RegistrationStatusResponse RegistrationStatus(string merchantSessionID);
+
+        #endregion
     }
 }

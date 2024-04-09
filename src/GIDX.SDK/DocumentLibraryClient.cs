@@ -44,6 +44,16 @@ namespace GIDX.SDK
             return CustomerDocumentsAsync(request);
         }
 
+        public CustomerDocumentsResponse CustomerDocuments(CustomerDocumentsRequest request)
+        {
+            return CustomerDocumentsAsync(request).Result;
+        }
+
+        public CustomerDocumentsResponse CustomerDocuments(string merchantCustomerID, string merchantSessionID)
+        {
+            return CustomerDocumentsAsync(merchantCustomerID, merchantSessionID).Result;
+        }
+
         #endregion
 
         #region DocumentRegistration
@@ -68,6 +78,16 @@ namespace GIDX.SDK
                 throw new ArgumentNullException("filePath");
 
             return DocumentRegistrationAsync(request, File.OpenRead(filePath), Path.GetFileName(filePath));
+        }
+
+        public DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, Stream fileStream, string fileName)
+        {
+            return DocumentRegistrationAsync(request, fileStream, fileName).Result;
+        }
+
+        public DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, string filePath)
+        {
+            return DocumentRegistrationAsync(request, filePath).Result;
         }
 
         #endregion
@@ -115,6 +135,16 @@ namespace GIDX.SDK
             };
 
             return DownloadDocumentAsync(request);
+        }
+
+        public DownloadDocumentResponse DownloadDocument(DownloadDocumentRequest request)
+        {
+            return DownloadDocumentAsync(request).Result;
+        }
+
+        public DownloadDocumentResponse DownloadDocument(string documentID, string merchantSessionID)
+        {
+            return DownloadDocumentAsync(documentID, merchantSessionID).Result;
         }
 
         #endregion

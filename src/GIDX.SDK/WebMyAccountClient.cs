@@ -24,5 +24,10 @@ namespace GIDX.SDK
 
             return await SendPostRequestAsync<CreateSessionRequest, CreateSessionResponse>(request, "CreateSession");
         }
+
+        public CreateSessionResponse CreateSession(CreateSessionRequest request)
+        {
+            return CreateSessionAsync(request).Result;
+        }
     }
 }

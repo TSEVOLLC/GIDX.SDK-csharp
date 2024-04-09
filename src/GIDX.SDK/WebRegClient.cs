@@ -25,6 +25,11 @@ namespace GIDX.SDK
             return await SendPostRequestAsync<CreateSessionRequest, CreateSessionResponse>(request, "CreateSession");
         }
 
+        public CreateSessionResponse CreateSession(CreateSessionRequest request)
+        {
+            return CreateSessionAsync(request).Result;
+        }
+
         #region CustomerRegistration
 
         public async Task<CustomerRegistrationResponse> CustomerRegistrationAsync(CustomerRegistrationRequest request)
@@ -46,6 +51,16 @@ namespace GIDX.SDK
             };
 
             return CustomerRegistrationAsync(request);
+        }
+
+        public CustomerRegistrationResponse CustomerRegistration(CustomerRegistrationRequest request)
+        {
+            return CustomerRegistrationAsync(request).Result;
+        }
+
+        public CustomerRegistrationResponse CustomerRegistration(string merchantCustomerID)
+        {
+            return CustomerRegistrationAsync(merchantCustomerID).Result;
         }
 
         #endregion
@@ -79,6 +94,16 @@ namespace GIDX.SDK
             };
 
             return RegistrationStatusAsync(request);
+        }
+
+        public RegistrationStatusResponse RegistrationStatus(RegistrationStatusRequest request)
+        {
+            return RegistrationStatusAsync(request).Result;
+        }
+
+        public RegistrationStatusResponse RegistrationStatus(string merchantSessionID)
+        {
+            return RegistrationStatusAsync(merchantSessionID).Result;
         }
 
         #endregion

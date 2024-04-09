@@ -56,5 +56,56 @@ namespace GIDX.SDK
         /// <param name="merchantSessionID">Required.  Used for logging purposes.</param>
         /// <returns></returns>
         Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentID, string merchantSessionID);
+
+        #region Legacy non-async methods
+
+        /// <summary>
+        /// Make a request to our CustomerDocuments endpoint to get a list of uploaded documents attached to a customer.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        CustomerDocumentsResponse CustomerDocuments(CustomerDocumentsRequest request);
+
+        /// <summary>
+        /// Make a request to our CustomerDocuments endpoint to get a list of uploaded documents attached to a customer.
+        /// </summary>
+        /// <param name="merchantCustomerID"></param>
+        /// <param name="merchantSessionID">Required.  Used for logging purposes.</param>
+        /// <returns></returns>
+        CustomerDocumentsResponse CustomerDocuments(string merchantCustomerID, string merchantSessionID);
+
+        /// <summary>
+        /// Make a request to our DocumentRegistration endpoint to upload a document and attach it to a MerchantCustomerID.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="fileStream">A stream of the file to upload</param>
+        /// <param name="fileName">The name of the file to upload</param>
+        /// <returns></returns>
+        DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, Stream fileStream, string fileName);
+
+        /// <summary>
+        /// Make a request to our DocumentRegistration endpoint to upload a document and attach it to a MerchantCustomerID.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="filePath">The local file path of the file to upload</param>
+        /// <returns></returns>
+        DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, string filePath);
+
+        /// <summary>
+        /// Make a request to our DownloadDocument endpoint to download a file that was previously uploaded.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        DownloadDocumentResponse DownloadDocument(DownloadDocumentRequest request);
+
+        /// <summary>
+        /// Make a request to our DownloadDocument endpoint to download a file that was previously uploaded.
+        /// </summary>
+        /// <param name="documentID">The DocumentID of the file.  It is returned in the <see cref="Document"/> object from the DocumentRegistration and CustomerDocuments methods.</param>
+        /// <param name="merchantSessionID">Required.  Used for logging purposes.</param>
+        /// <returns></returns>
+        DownloadDocumentResponse DownloadDocument(string documentID, string merchantSessionID);
+
+        #endregion
     }
 }

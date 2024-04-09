@@ -7,5 +7,11 @@ namespace GIDX.SDK
     public interface IWebMyAccountClient
     {
         Task<CreateSessionResponse> CreateSessionAsync(CreateSessionRequest request);
+
+        #region Legacy non-async methods
+
+        CreateSessionResponse CreateSession(CreateSessionRequest request);
+
+        #endregion
     }
 }
