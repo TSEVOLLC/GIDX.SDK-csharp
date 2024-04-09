@@ -13,9 +13,12 @@ namespace GIDX.SDK
     public class GIDXClient : IGIDXClient
     {
         public const string GIDXHttpClientName = "GIDX";
+        public const string SandboxDomain = "https://api.gidx-service.in";
+        public const string ProductionDomain = "https://api.gidx-service.com";
+        public const string Version3 = "v3.0";
 
-        private const string DefaultDomain = "https://api.gidx-service.in";
-        private const string DefaultVersion = "v3.0";
+        private const string DefaultDomain = SandboxDomain;
+        private const string DefaultVersion = Version3;
         
         private Uri _baseAddress;
         private HttpClient _httpClient;
@@ -52,8 +55,8 @@ namespace GIDX.SDK
         /// Initializes a client that will use the domain and version provided instead of the sandbox endpoint.
         /// </summary>
         /// <param name="credentials"></param>
-        /// <param name="domain">The domain of the endpoint (ex: "https://api.gidx-service.in").</param>
-        /// <param name="version">The API version number you want to use.</param>
+        /// <param name="domain">The domain of the endpoint (ex: "https://api.gidx-service.in"). Use available constants <see cref="SandboxDomain"/> and <see cref="ProductionDomain"/></param>
+        /// <param name="version">The API version number you want to use. Use available constant <see cref="Version3"/></param>
         public GIDXClient(MerchantCredentials credentials, string domain, string version)
             : this(credentials, domain, version, (HttpClient)null)
         {
@@ -64,16 +67,12 @@ namespace GIDX.SDK
         /// Initializes a client that will use the domain and version provided instead of the sandbox endpoint.
         /// </summary>
         /// <param name="credentials"></param>
-        /// <param name="domain">The domain of the endpoint (ex: "https://api.gidx-service.in").</param>
-        /// <param name="version">The API version number you want to use.</param>
+        /// <param name="domain">The domain of the endpoint (ex: "https://api.gidx-service.in"). Use available constants <see cref="SandboxDomain"/> and <see cref="ProductionDomain"/></param>
+        /// <param name="version">The API version number you want to use. Use available constant <see cref="Version3"/></param>
         /// <param name="httpClient">An HttpClient to use for HTTP requests.</param>
         public GIDXClient(MerchantCredentials credentials, string domain, string version, HttpClient httpClient)
         {
-            if (version[0] != 'v')
-                version = "v" + version;
-
-            var path = string.Format("/{0}/api/", version);
-            Init(credentials, new Uri(new Uri(domain), path), httpClient, null);
+            Init(credentials, BuildUrl(domain, version), httpClient, null);
         }
 
         /// <summary>
@@ -91,16 +90,12 @@ namespace GIDX.SDK
         /// Initializes a client that will use the domain and version provided instead of the sandbox endpoint.
         /// </summary>
         /// <param name="credentials"></param>
-        /// <param name="domain">The domain of the endpoint (ex: "https://api.gidx-service.in").</param>
-        /// <param name="version">The API version number you want to use.</param>
+        /// <param name="domain">The domain of the endpoint (ex: "https://api.gidx-service.in"). Use available constants <see cref="SandboxDomain"/> and <see cref="ProductionDomain"/></param>
+        /// <param name="version">The API version number you want to use. Use available constant <see cref="Version3"/></param>
         /// <param name="httpClientFactory">An IHttpClientFactory to use to create HttpClients. A named client will be created using <see cref="GIDXHttpClientName"/>.</param>
         public GIDXClient(MerchantCredentials credentials, string domain, string version, IHttpClientFactory httpClientFactory)
         {
-            if (version[0] != 'v')
-                version = "v" + version;
-
-            var path = string.Format("/{0}/api/", version);
-            Init(credentials, new Uri(new Uri(domain), path), null, httpClientFactory);
+            Init(credentials, BuildUrl(domain, version), null, httpClientFactory);
         }
 
         /// <summary>
@@ -129,6 +124,21 @@ namespace GIDX.SDK
                     return _httpClient;
                 return _httpClientFactory.CreateClient(GIDXHttpClientName);
             };
+        }
+
+        private Uri BuildUrl(string domain, string version)
+        {
+            if (string.IsNullOrWhiteSpace(domain))
+                domain = DefaultDomain;
+
+            if (string.IsNullOrWhiteSpace(version))
+                version = DefaultVersion;
+
+            if (version[0] != 'v')
+                version = "v" + version;
+
+            var path = string.Format("/{0}/api/", version);
+            return new Uri(new Uri(domain), path);
         }
 
         #region Child Client Properties
