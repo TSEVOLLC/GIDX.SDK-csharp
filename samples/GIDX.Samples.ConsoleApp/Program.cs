@@ -2,6 +2,8 @@
 using GIDX.SDK.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace GIDX.Samples.ConsoleApp
 {
@@ -9,46 +11,48 @@ namespace GIDX.Samples.ConsoleApp
     {
         async static Task Main(string[] args)
         {
-            var builder = Host.CreateApplicationBuilder(args);
-            builder.Services.AddTransient<Program>();
-
-            builder.Services.AddHttpClient(GIDX.SDK.GIDXClient.GIDXHttpClientName);
-            
-            var credentials = new MerchantCredentials
+            var builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings
             {
-                MerchantID = "",
-                ApiKey = "",
-                ActivityTypeID = "",
-                ProductTypeID = "",
-                DeviceTypeID = ""
-            };
-            builder.Services.AddSingleton(credentials);
+                EnvironmentName = Environments.Development, //Must be Development to load local user secrets
+                Args = args
+            });
+            AddSamples(builder.Services);
+            
+            //Setting log level to Trace will log full JSON request and response to console
+            builder.Logging.SetMinimumLevel(LogLevel.Trace);
+            builder.Services.AddScoped<HttpClientBodyLogger>();
+
+            //Use IHttpClientFactory to create HttpClient for GIDXClient
+            builder.Services.AddHttpClient(GIDXClient.GIDXHttpClientName)
+                .AddLogger<HttpClientBodyLogger>(true);
+
+            //Using .net User Secrets for storing credentials on local development machine
+            builder.Services.AddOptions<MerchantCredentials>()
+                .BindConfiguration("GIDXCredentials");
+
             builder.Services.AddScoped(sp =>
             {
-                var domain = "https://api.gidx-service.in";
-                //var domain = "https://api.gidx-service.com";
-                var version = "3.0";
-                var credentials = sp.GetRequiredService<MerchantCredentials>();
+                var domain = GIDXClient.SandboxDomain;
+                //var domain = GIDXClient.ProductionDomain;
+                var credentials = sp.GetRequiredService<IOptions<MerchantCredentials>>();
                 var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-                return new GIDXClient(credentials, domain, version, httpClientFactory);
+                return new GIDXClient(credentials.Value, domain, GIDXClient.Version3, httpClientFactory);
             });
 
             using IHost host = builder.Build();
             using IServiceScope scope = host.Services.CreateScope();
-            scope.ServiceProvider.GetRequiredService<Program>().Run();
+            //await scope.ServiceProvider.GetRequiredService<CustomerRegistrationSample>().Run();
+            //await scope.ServiceProvider.GetRequiredService<CustomerUpdateSample>().Run();
+            await scope.ServiceProvider.GetRequiredService<DirectCashierSample>().Run();
+
             await host.RunAsync();
         }
 
-        private readonly GIDXClient gidxClient;
-
-        public Program(GIDXClient gidxClient)
+        private static void AddSamples(IServiceCollection services)
         {
-            this.gidxClient = gidxClient;
-        }
-
-        public void Run()
-        {
-            //gidxClient.DirectCashier.CreateSessionAsync()
+            services.AddTransient<DirectCashierSample>();
+            services.AddTransient<CustomerRegistrationSample>();
+            services.AddTransient<CustomerUpdateSample>();
         }
     }
 }
