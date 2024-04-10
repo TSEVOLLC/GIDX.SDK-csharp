@@ -26,10 +26,13 @@ namespace GIDX.Samples.ConsoleApp
              * 3. Call CompleteSession with the credit card's token
              */
 
+            //Replace with a MerchantCustomerID you have already verified via CustomerRegistration
+            var merchantCustomerID = "481ba6b8-f3a2-4802-9d5f-1c5f60fe6f36";
+
             var createSessionRequest = new CreateSessionRequest
             {
                 MerchantSessionID = Guid.NewGuid().ToString(),
-                MerchantCustomerID = "481ba6b8-f3a2-4802-9d5f-1c5f60fe6f36", //User needs to already be registered and verified via CustomerRegistration
+                MerchantCustomerID = merchantCustomerID,
                 MerchantTransactionID = DateTime.Now.ToString("yyyyMMddhhmmss"),
                 PayActionCode = PayActionCode.Pay,
                 CallbackURL = "https://callback url here",

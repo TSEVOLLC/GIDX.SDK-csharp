@@ -20,15 +20,17 @@ namespace GIDX.Samples.ConsoleApp
 
         public async Task Run()
         {
+            //Replace with a MerchantCustomerID you have created
+            var merchantCustomerID = "481ba6b8-f3a2-4802-9d5f-1c5f60fe6f36";
+
             var customerUpdateRequest = new CustomerUpdateRequest
             {
                 MerchantSessionID = Guid.NewGuid().ToString(),
-                MerchantCustomerID = "481ba6b8-f3a2-4802-9d5f-1c5f60fe6f36",
+                MerchantCustomerID = merchantCustomerID,
                 Verified = true
             };
 
-            var customerUpdateResponse = gidxClient.CustomerIdentity.CustomerUpdateAsync(customerUpdateRequest).Result;
-            //var customerUpdateResponse = await gidxClient.CustomerIdentity.CustomerUpdateAsync(customerUpdateRequest);
+            var customerUpdateResponse = await gidxClient.CustomerIdentity.CustomerUpdateAsync(customerUpdateRequest);
         }
     }
 }
