@@ -8,7 +8,7 @@ using Newtonsoft.Json.Converters;
 
 namespace GIDX.SDK.Models.WebCashier
 {
-    public class CreateSessionRequest : RequestBase
+    public class CreateSessionRequest : RequestBase, IContestActivity
     {
         public CreateSessionRequest()
         {
@@ -24,5 +24,6 @@ namespace GIDX.SDK.Models.WebCashier
         public string CallbackURL { get; set; }
         public CashierPaymentAmount CashierPaymentAmount { get; set; }
         public CustomerDetails CustomerRegistration { get; set; }
+        public List<string> ContestCodes { get; set; }
     }
 }

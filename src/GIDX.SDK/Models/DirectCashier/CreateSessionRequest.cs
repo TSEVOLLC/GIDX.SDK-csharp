@@ -8,7 +8,7 @@ using Newtonsoft.Json.Converters;
 
 namespace GIDX.SDK.Models.DirectCashier
 {
-    public class CreateSessionRequest : RequestBase
+    public class CreateSessionRequest : RequestBase, IContestActivity
     {
         public CreateSessionRequest()
         {
@@ -26,5 +26,6 @@ namespace GIDX.SDK.Models.DirectCashier
         public DateTime? FirstRecurringDate { get; set; }
         public string CallbackURL { get; set; }
         public CustomerDetails CustomerRegistration { get; set; }
+        public List<string> ContestCodes { get; set; }
     }
 }
