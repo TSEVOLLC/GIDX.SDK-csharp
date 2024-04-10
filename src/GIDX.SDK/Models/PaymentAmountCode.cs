@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace GIDX.SDK.Models
 {
-    public abstract class SessionStatusCallbackResponseBase
+    public enum PaymentAmountCode
     {
-        public string MerchantID { get; set; }
-        public string SessionStatus { get; set; }
+        Sale,
+        Bonus,
+        Open,
+        Fee
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GIDX.SDK.Models.WebCashier
+namespace GIDX.SDK.Models.DirectCashier
 {
-    public class SessionStatusCallbackResponse
+    public class PaymentDetailRequest : RequestBase
     {
         public string MerchantTransactionID { get; set; }
     }

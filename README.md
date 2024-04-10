@@ -6,17 +6,25 @@ Available via NuGet: [GIDX.SDK](https://www.nuget.org/packages/GIDX.SDK)
 ### What's Here
 
 - [Using the SDK](#using-the-sdk)
+  - [Creating a client](#creating-a-client)
+  - [Dependency injection](#dependency-injection)
+- [Samples](#samples)
 - [Customer Identity](#customer-identity)
   - [Direct API](#customer-identity-direct-api)
   - [Web API](#customer-identity-web-api)
-- [Web Cashier](#web-cashier)
-- [Upgrading to v2](#upgrading-to-v2)
+- [Direct Cashier](#direct-cashier)
+- [Document Library](#document-library)
+- [Upgrading to v3](#upgrading-to-v3)
 
 ## Using the SDK
 
 ### Creating a client
 
-To make a request, you first need to create a **GIDXClient**.  Its constructor accepts a **MerchantCredentials** object which you should populate with the credentials we provide you.
+To make a request, you first need to create a **GIDXClient**.  There are multiple constructor overloads, but these are the possible parameters:
+- A **MerchantCredentials** object which you should populate with the credentials we provide you.
+- The GIDX domain you are connecting to: **GIDXClient.SandboxDomain** or **GIDXClient.ProductionDomain**
+- The GIDX version: **GIDXClient.Version3**
+- An **HttpClient** or **IHttpClientFactory**. If neither are provided, an **HttpClient** will be created for every instance of **GIDXClient**.
 ```csharp
 var credentials = new MerchantCredentials
 {
@@ -26,7 +34,34 @@ var credentials = new MerchantCredentials
     DeviceTypeID = "[Insert DeviceTypeID]",
     ActivityTypeID = "[Insert ActivityTypeID]"
 };
-var gidxClient = new GIDXClient(credentials);
+var gidxClient = new GIDXClient(credentials, GIDXClient.SandboxDomain, GIDXClient.Version3, httpClientFactory);
+```
+
+### Dependency injection
+
+A working example can be found in the [GIDX.Samples.ConsoleApp project](./samples/GIDX.Samples.ConsoleApp/Program.cs). The relevant parts are below:
+```csharp
+//Use IHttpClientFactory to create HttpClient for GIDXClient
+builder.Services.AddHttpClient(GIDXClient.GIDXHttpClientName);
+
+//Using .net User Secrets for storing credentials. Replace "GIDXCredentials" with whatever your configuration section is called.
+builder.Services.AddOptions<MerchantCredentials>()
+    .BindConfiguration("GIDXCredentials");
+
+builder.Services.AddScoped(sp =>
+{
+    //Choose between sandbox and production
+    var domain = GIDXClient.SandboxDomain;
+    var domain = GIDXClient.ProductionDomain;
+
+    //Get MerchantCredentials registerd above
+    var credentials = sp.GetRequiredService<IOptions<MerchantCredentials>>();
+
+    //Get IHttpClientFactory registered above
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+
+    return new GIDXClient(credentials.Value, domain, GIDXClient.Version3, httpClientFactory);
+});
 ```
 
 ### Making a request
@@ -43,6 +78,10 @@ if (response.IsSuccess)
     //Continue on with your code here
 }
 ```
+
+## Samples
+
+For working samples, check out the [GIDX.Samples](./samples) solution in this repository.
 
 ## Customer Identity
 
@@ -63,9 +102,13 @@ var request = new CustomerRegistrationRequest
     StateCode = "CA",
     PostalCode = "90001",
     EmailAddress = "michael.bluth@saveourbluths.org",
-    DeviceIpAddress = "144.214.138.154"
+    DeviceIpAddress = "144.214.138.154",
+    DeviceGps = new DeviceGpsDetails {
+        Latitude = 29.77637,
+        Longitude = -95.4454449
+    }
 };
-var response = gidxClient.CustomerIdentity.CustomerRegistration(request);
+var response = await gidxClient.CustomerIdentity.CustomerRegistrationAsync(request);
 ```
 **Note**: The data used in this example is just a sample and will not return any results. 
 
@@ -84,9 +127,13 @@ var request = new WebReg.CreateSessionRequest
     FirstName = "Michael",
     LastName = "Bluth",
     EmailAddress = "michael.bluth@saveourbluths.org",
-    CustomerIpAddress = "144.214.138.154"
+    CustomerIpAddress = "144.214.138.154",
+    DeviceGps = new DeviceGpsDetails {
+        Latitude = 29.77637,
+        Longitude = -95.4454449
+    }
 };
-var response = gidxClient.WebReg.CreateSession(request);
+var response = await gidxClient.WebReg.CreateSessionAsync(request);
 
 //response.SessionURL will contain the HTML of the script tag you should embed in your page
 ```
@@ -94,7 +141,7 @@ var response = gidxClient.WebReg.CreateSession(request);
 #### Getting the session status
 
 ```csharp
-var response = gidxClient.WebReg.RegistrationStatus("[Original MerchantSessionID]");
+var response = await gidxClient.WebReg.RegistrationStatusAsync("[Original MerchantSessionID]");
 ```
 
 #### Handling the callback
@@ -112,45 +159,23 @@ var callbackResponse = new WebReg.SessionStatusCallbackResponse
 };
 
 //Get customer details after registration is completed
-var customerRegistration = gidxClient.WebReg.CustomerRegistration("[Insert MerchantCustomerID]");
+var customerProfile = await gidxClient.CustomerIdentity.CustomerProfileAsync("[Insert MerchantCustomerID]", "[Insert MerchantSessionID]");
 ```
 
-## Web Cashier
+## Direct Cashier
 
-### Creating a session
+### Creating and completing a session
 
-```csharp
-var request = new WebCashier.CreateSessionRequest
-{
-    //A GUID is generated below for MerchantCustomerID, MerchantSessionID, MerchantOrderID and MerchantTransactionID for testing purposes only.
-    //Ideally, you would pull these from your database.
-    MerchantCustomerID = Guid.NewGuid().ToString("N"),
-    MerchantSessionID = Guid.NewGuid().ToString("N"),
-    MerchantOrderID = Guid.NewGuid().ToString("N"),
-    MerchantTransactionID = Guid.NewGuid().ToString("N"),
-    CallbackURL = "http://www.yourserver.com/callback",
-    CustomerIpAddress = "144.214.138.154",
-    PayActionCode = PayActionCode.Pay
-};
-var response = gidxClient.WebCashier.CreateSession(request);
-
-//response.SessionURL will contain the HTML of the script tag you should embed in your page
-```
-
-### Getting the session status
-
-```csharp
-var response = gidxClient.WebCashier.WebCashierStatus("[Original MerchantSessionID]");
-```
+For a full working example of creating a session, saving a payment method, and completing a session, look in the [DirectCashierSample](./samples/GIDX.Samples.ConsoleApp/DirectCashierSample.cs).
 
 ### Handling the callback
 
 The SDK provides **SessionStatusCallback** and **SessionStatusCallbackResponse** models for you to use in your callback.  You can attempt to let your web framework handle the model binding or use the **ParseCallback** method provided by the SDK.
 
 ```csharp
-var callback = gidxClient.WebCashier.ParseCallback(callbackJson);
+var callback = gidxClient.DirectCashier.ParseCallback(callbackJson);
 
-var callbackResponse = new WebCashier.SessionStatusCallbackResponse
+var callbackResponse = new DirectCashier.SessionStatusCallbackResponse
 {
     MerchantID = gidxClient.Credentials.MerchantID,
     SessionStatus = "OK",
@@ -158,7 +183,7 @@ var callbackResponse = new WebCashier.SessionStatusCallbackResponse
 };
 
 //Get payment details not returned in the callback
-var paymentDetails = gidxClient.WebCashier.PaymentDetail(callback.MerchantTransactionID);
+var paymentDetails = await gidxClient.DirectCashier.PaymentDetailAsync(callback.MerchantSessionID, callback.MerchantTransactionID);
 ```
 
 ## Document Library
@@ -178,11 +203,11 @@ var request = new DocumentRegistrationRequest
     DocumentStatus = DocumentStatus.ReviewComplete
 };
 
-var response = gidxClient.DocumentLibrary.DocumentRegistration(request, @"C:\Path\To\File.png");
+var response = await gidxClient.DocumentLibrary.DocumentRegistrationAsync(request, @"C:\Path\To\File.png");
 
 //Or if the file is not saved locally, you can load it into a Stream
 
-var response = gidxClient.DocumentLibrary.DocumentRegistration(request, stream, "File.png");
+var response = await gidxClient.DocumentLibrary.DocumentRegistrationAsync(request, stream, "File.png");
 ```
 
 ### Downloading a document
@@ -192,7 +217,7 @@ To download a document, you will pass its DocumentID.  If the request is success
 ```csharp
 var documentID = "abc123";
 var merchantSessionID = Guid.NewGuid().ToString("N");
-var response = gidxClient.DocumentLibrary.DownloadDocument(documentID, merchantSessionID);
+var response = await gidxClient.DocumentLibrary.DownloadDocumentAsync(documentID, merchantSessionID);
 
 if (response.IsSuccess)
 {
@@ -205,40 +230,22 @@ if (response.IsSuccess)
 }
 ```
 
-## Upgrading to v2
+## Upgrading to v3
 
 ### Breaking changes
 
-- **Sub-clients** - To stop the **GIDXClient** class from getting too big, API methods for different services were organized into sub-clients exposed as properties in **GIDXClient**
+- **Target Framework** - Changed to .Net Standard 2.0
+- **WebCashier Model namespaces** - Models shared by both WebCashier and DirectCashier were moved from **GIDX.SDK.Models.WebCashier** to **GIDX.SDK.Models**. Affected types are:
+  - CashierPaymentAmount
+  - PayActionCode
+  - PaymentAmountCode
+  - PaymentAmountType
+  - PaymentDetail
+  - PaymentStatusCode
+  - RecurringInterval
 
-- **Model namespaces** - Models that aren't shared across sub-clients were moved into their own namespace under **GIDX.SDK.Models**
+### Non-breaking changes
 
-### Migration
-
-#### Customer Identity (Direct API)
-
-- **CustomerRegistration** and **CustomerProfile** methods were moved to the **CustomerIdentity** sub-client
-- Models namespace is now **GIDX.SDK.Models.CustomerIdentity**
-
-```csharp
-using GIDX.SDK.Models.CustomerIdentity;
-
-//v1
-var response = gidxClient.CustomerRegistration(request);
-//v2 equivalent
-var response = gidxClient.CustomerIdentity.CustomerRegistration(request);
-```
-
-#### Document Library
-
-- **DocumentRegistration**, **DownloadDocument** and **CustomerDocuments** methods were moved to the **DocumentLibrary** sub-client
-- Models namespace is now **GIDX.SDK.Models.DocumentLibrary**
-
-```csharp
-using GIDX.SDK.Models.DocumentLibrary;
-
-//v1
-var response = gidxClient.DocumentRegistration(request, @"C:\Path\To\File.png");
-//v2 equivalent
-var response = gidxClient.DocumentLibrary.DocumentRegistration(request, @"C:\Path\To\File.png");
-```
+- DirectCashier was added.
+- Async methods were added for all API calls. The non-async methods were left for backwards compatibility.
+- Support for IHttpClientFactory was added.

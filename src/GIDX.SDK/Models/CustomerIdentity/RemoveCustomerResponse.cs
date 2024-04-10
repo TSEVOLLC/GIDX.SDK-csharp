@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace GIDX.SDK.Models.CustomerIdentity
 {
-    public class CustomerMonitorRequest : RequestBase, IContestActivity
+    public class RemoveCustomerResponse : ResponseBase
     {
         public string MerchantCustomerID { get; set; }
-        public List<string> ContestCodes { get; set; }
     }
 }

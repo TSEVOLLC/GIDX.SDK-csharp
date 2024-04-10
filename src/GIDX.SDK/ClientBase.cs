@@ -18,104 +18,115 @@ namespace GIDX.SDK
     /// </summary>
     internal abstract class ClientBase
     {
-        protected readonly HttpClient _httpClient;
+        protected readonly Func<HttpClient> _getHttpClient;
         private readonly JsonSerializer _jsonSerializer;
+        private readonly Uri _baseAddress;
 
         public MerchantCredentials Credentials { get; set; }
 
-        protected ClientBase(MerchantCredentials credentials, Uri baseAddress)
-            : this(credentials, baseAddress, null)
-        {
-            
-        }
-
-        protected ClientBase(MerchantCredentials credentials, Uri baseAddress, string service)
+        protected ClientBase(MerchantCredentials credentials, Uri baseAddress, Func<HttpClient> getHttpClient, string service)
         {
             Credentials = credentials;
 
+            _baseAddress = baseAddress;
             if (!string.IsNullOrEmpty(service))
             {
-                baseAddress = new Uri(baseAddress, service);
+                _baseAddress = new Uri(_baseAddress, service);
             }
 
-            if (!baseAddress.AbsoluteUri.EndsWith("/"))
+            if (!_baseAddress.AbsoluteUri.EndsWith("/"))
             {
                 //Make sure baseAddress ends in slash so that we can just pass the method name when making requests
-                baseAddress = new Uri(baseAddress.AbsoluteUri + "/");
+                _baseAddress = new Uri(_baseAddress.AbsoluteUri + "/");
             }
 
-            _httpClient = new HttpClient()
-            {
-                BaseAddress = baseAddress
-            };
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _getHttpClient = getHttpClient;
 
             //Creating a JsonSerializer instead of using JsonConvert because we don't want to use any default settings set by the application
             _jsonSerializer = JsonSerializer.Create();
         }
 
-        protected TResponse SendPostRequest<TRequest, TResponse>(TRequest request, string endpoint)
+        protected async Task<TResponse> SendPostRequestAsync<TRequest, TResponse>(TRequest request, string endpoint)
             where TRequest : RequestBase
             where TResponse : ResponseBase, new()
         {
             SetCredentials(request);
 
             var requestJson = ToJson(request);
-            var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
-            var httpResponse = _httpClient.PostAsync(endpoint, content).Result;
 
-            return LoadResponse<TResponse>(httpResponse);
+            using (var httpRequest = new HttpRequestMessage(HttpMethod.Post, new Uri(_baseAddress, endpoint)))
+            {
+                httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                httpRequest.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
+
+                var httpClient = _getHttpClient();
+                var httpResponse = await httpClient.SendAsync(httpRequest);
+
+                return await LoadResponseAsync<TResponse>(httpResponse);
+            }
         }
 
-        protected TResponse SendGetRequest<TRequest, TResponse>(TRequest request, string endpoint)
+        protected async Task<TResponse> SendGetRequestAsync<TRequest, TResponse>(TRequest request, string endpoint)
             where TRequest : RequestBase
             where TResponse : ResponseBase, new()
         {
-            var httpResponse = SendGetRequest<TRequest>(request, endpoint);
-            return LoadResponse<TResponse>(httpResponse);
+            var httpResponse = await SendGetRequestAsync<TRequest>(request, endpoint);
+            return await LoadResponseAsync<TResponse>(httpResponse);
         }
 
-        protected HttpResponseMessage SendGetRequest<TRequest>(TRequest request, string endpoint)
+        protected Task<HttpResponseMessage> SendGetRequestAsync<TRequest>(TRequest request, string endpoint)
             where TRequest : RequestBase
         {
             SetCredentials(request);
 
             var queryString = BuildQueryString(request);
             var fullUrl = string.Format("{0}?{1}", endpoint, queryString);
-            var httpResponse = _httpClient.GetAsync(fullUrl).Result;
 
-            return httpResponse;
+            using (var httpRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(_baseAddress, fullUrl)))
+            {
+                httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var httpClient = _getHttpClient();
+                return httpClient.SendAsync(httpRequest);
+            }
         }
 
-        protected TResponse UploadFile<TRequest, TResponse>(TRequest request, Stream fileStream, string fileName, string endpoint)
+        protected async Task<TResponse> UploadFileAsync<TRequest, TResponse>(TRequest request, Stream fileStream, string fileName, string endpoint)
             where TRequest : RequestBase
             where TResponse : ResponseBase, new()
         {
             SetCredentials(request);
 
-            var requestContent = new MultipartFormDataContent();
+            using (var httpRequest = new HttpRequestMessage(HttpMethod.Post, new Uri(_baseAddress, endpoint)))
+            {
+                httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var fileContent = new StreamContent(fileStream);
-            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
-            requestContent.Add(fileContent, "file", fileName);
-            
-            string requestJson = ToJson(request);
-            var jsonContent = new StringContent(requestJson);
-            requestContent.Add(jsonContent, "json");
+                var requestContent = new MultipartFormDataContent();
 
-            var httpResponse = _httpClient.PostAsync(endpoint, requestContent).Result;
+                var fileContent = new StreamContent(fileStream);
+                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+                requestContent.Add(fileContent, "file", fileName);
 
-            return LoadResponse<TResponse>(httpResponse);
+                string requestJson = ToJson(request);
+                var jsonContent = new StringContent(requestJson);
+                requestContent.Add(jsonContent, "json");
+                httpRequest.Content = requestContent;
+
+                var httpClient = _getHttpClient();
+                var httpResponse = await httpClient.SendAsync(httpRequest);
+
+                return await LoadResponseAsync<TResponse>(httpResponse);
+            }
         }
 
-        protected TResponse LoadResponse<TResponse>(HttpResponseMessage httpResponse)
+        protected async Task<TResponse> LoadResponseAsync<TResponse>(HttpResponseMessage httpResponse)
             where TResponse : ResponseBase, new()
         {
             TResponse response;
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                var responseJson = httpResponse.Content.ReadAsStringAsync().Result;
+                var responseJson = await httpResponse.Content.ReadAsStringAsync();
                 response = FromJson<TResponse>(responseJson);
             }
             else

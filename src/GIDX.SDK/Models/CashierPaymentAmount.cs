@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GIDX.SDK.Models.WebCashier
+namespace GIDX.SDK.Models
 {
     public class CashierPaymentAmount
     {
@@ -15,5 +15,6 @@ namespace GIDX.SDK.Models.WebCashier
         public string BonusDetails { get; set; }
         public DateTime? BonusExpirationDateTime { get; set; }
         public string PaymentCurrencyCode { get; set; }
+        public bool? OverrideLimit { get; set; }
     }
 }

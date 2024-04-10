@@ -5,14 +5,14 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using GIDX.SDK.Models;
-using GIDX.SDK.Models.WebCashier;
+using GIDX.SDK.Models.DirectCashier;
 
 namespace GIDX.SDK
 {
-    internal class WebCashierClient : ClientBase, IWebCashierClient
+    internal class DirectCashierClient : ClientBase, IDirectCashierClient
     {
-        public WebCashierClient(MerchantCredentials credentials, Uri baseAddress, Func<HttpClient> getHttpClient)
-            : base(credentials, baseAddress, getHttpClient, "WebCashier")
+        public DirectCashierClient(MerchantCredentials credentials, Uri baseAddress, Func<HttpClient> getHttpClient)
+            : base(credentials, baseAddress, getHttpClient, "DirectCashier")
         {
 
         }
@@ -30,17 +30,17 @@ namespace GIDX.SDK
             return CreateSessionAsync(request).Result;
         }
 
-        public async Task<CreateSessionWebWalletResponse> CreateSessionWebWalletAsync(CreateSessionWebWalletRequest request)
+        public async Task<CompleteSessionResponse> CompleteSessionAsync(CompleteSessionRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return await SendPostRequestAsync<CreateSessionWebWalletRequest, CreateSessionWebWalletResponse>(request, "CreateSessionWebWallet");
+            return await SendPostRequestAsync<CompleteSessionRequest, CompleteSessionResponse>(request, "CompleteSession");
         }
 
-        public CreateSessionWebWalletResponse CreateSessionWebWallet(CreateSessionWebWalletRequest request)
+        public CompleteSessionResponse CompleteSession(CompleteSessionRequest request)
         {
-            return CreateSessionWebWalletAsync(request).Result;
+            return CompleteSessionAsync(request).Result;
         }
 
         public SessionStatusCallback ParseCallback(string json)
@@ -126,39 +126,17 @@ namespace GIDX.SDK
 
         #endregion
 
-        #region WebCashierStatus
-
-        public async Task<WebCashierStatusResponse> WebCashierStatusAsync(WebCashierStatusRequest request)
+        public async Task<SavePaymentMethodResponse> SavePaymentMethodAsync(SavePaymentMethodRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return await SendGetRequestAsync<WebCashierStatusRequest, WebCashierStatusResponse>(request, "WebCashierStatus");
+            return await SendPostRequestAsync<SavePaymentMethodRequest, SavePaymentMethodResponse>(request, "PaymentMethod");
         }
 
-        public Task<WebCashierStatusResponse> WebCashierStatusAsync(string merchantSessionID)
+        public SavePaymentMethodResponse SavePaymentMethod(SavePaymentMethodRequest request)
         {
-            if (merchantSessionID == null)
-                throw new ArgumentNullException("merchantSessionID");
-
-            var request = new WebCashierStatusRequest
-            {
-                MerchantSessionID = merchantSessionID
-            };
-
-            return WebCashierStatusAsync(request);
+            return SavePaymentMethodAsync(request).Result;
         }
-
-        public WebCashierStatusResponse WebCashierStatus(WebCashierStatusRequest request)
-        {
-            return WebCashierStatusAsync(request).Result;
-        }
-
-        public WebCashierStatusResponse WebCashierStatus(string merchantSessionID)
-        {
-            return WebCashierStatusAsync(merchantSessionID).Result;
-        }
-
-        #endregion
     }
 }

@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GIDX.SDK.Models.WebCashier
+namespace GIDX.SDK.Models
 {
-    public enum PaymentAmountCode
+    public enum RecurringInterval
     {
-        Sale,
-        Bonus,
-        Open,
-        Fee
+        Yearly = 1,
+        Monthly = 2
     }
 }

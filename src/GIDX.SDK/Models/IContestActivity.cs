@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GIDX.SDK.Models.WebCashier
+namespace GIDX.SDK.Models
 {
-    public enum PayActionCode
+    public interface IContestActivity
     {
-        Pay,
-        Payout
+        List<string> ContestCodes { get; set; }
     }
 }

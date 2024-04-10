@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GIDX.SDK.Models.WebReg
+namespace GIDX.SDK.Models
 {
-    public class SessionStatusCallbackResponse
+    public enum PayActionCode
     {
-        public string MerchantCustomerID { get; set; }
+        Pay,
+        Payout
     }
 }

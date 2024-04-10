@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using GIDX.SDK.Models;
@@ -11,23 +12,23 @@ namespace GIDX.SDK
 {
     internal class DocumentLibraryClient : ClientBase, IDocumentLibraryClient
     {
-        public DocumentLibraryClient(MerchantCredentials credentials, Uri baseAddress)
-            : base(credentials, baseAddress, "DocumentLibrary")
+        public DocumentLibraryClient(MerchantCredentials credentials, Uri baseAddress, Func<HttpClient> getHttpClient)
+            : base(credentials, baseAddress, getHttpClient, "DocumentLibrary")
         {
 
         }
 
         #region CustomerDocuments
 
-        public CustomerDocumentsResponse CustomerDocuments(CustomerDocumentsRequest request)
+        public async Task<CustomerDocumentsResponse> CustomerDocumentsAsync(CustomerDocumentsRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
-            return SendGetRequest<CustomerDocumentsRequest, CustomerDocumentsResponse>(request, "CustomerDocuments");
+            return await SendGetRequestAsync<CustomerDocumentsRequest, CustomerDocumentsResponse>(request, "CustomerDocuments");
         }
 
-        public CustomerDocumentsResponse CustomerDocuments(string merchantCustomerID, string merchantSessionID)
+        public Task<CustomerDocumentsResponse> CustomerDocumentsAsync(string merchantCustomerID, string merchantSessionID)
         {
             if (merchantCustomerID == null)
                 throw new ArgumentNullException("merchantCustomerID");
@@ -40,14 +41,24 @@ namespace GIDX.SDK
                 MerchantCustomerID = merchantCustomerID,
                 MerchantSessionID = merchantSessionID
             };
-            return CustomerDocuments(request);
+            return CustomerDocumentsAsync(request);
+        }
+
+        public CustomerDocumentsResponse CustomerDocuments(CustomerDocumentsRequest request)
+        {
+            return CustomerDocumentsAsync(request).Result;
+        }
+
+        public CustomerDocumentsResponse CustomerDocuments(string merchantCustomerID, string merchantSessionID)
+        {
+            return CustomerDocumentsAsync(merchantCustomerID, merchantSessionID).Result;
         }
 
         #endregion
 
         #region DocumentRegistration
 
-        public DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, Stream fileStream, string fileName)
+        public async Task<DocumentRegistrationResponse> DocumentRegistrationAsync(DocumentRegistrationRequest request, Stream fileStream, string fileName)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -55,10 +66,10 @@ namespace GIDX.SDK
             if (fileStream == null)
                 throw new ArgumentNullException("fileStream");
 
-            return UploadFile<DocumentRegistrationRequest, DocumentRegistrationResponse>(request, fileStream, fileName, "DocumentRegistration");
+            return await UploadFileAsync<DocumentRegistrationRequest, DocumentRegistrationResponse>(request, fileStream, fileName, "DocumentRegistration");
         }
 
-        public DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, string filePath)
+        public Task<DocumentRegistrationResponse> DocumentRegistrationAsync(DocumentRegistrationRequest request, string filePath)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -66,20 +77,30 @@ namespace GIDX.SDK
             if (filePath == null)
                 throw new ArgumentNullException("filePath");
 
-            return DocumentRegistration(request, File.OpenRead(filePath), Path.GetFileName(filePath));
+            return DocumentRegistrationAsync(request, File.OpenRead(filePath), Path.GetFileName(filePath));
+        }
+
+        public DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, Stream fileStream, string fileName)
+        {
+            return DocumentRegistrationAsync(request, fileStream, fileName).Result;
+        }
+
+        public DocumentRegistrationResponse DocumentRegistration(DocumentRegistrationRequest request, string filePath)
+        {
+            return DocumentRegistrationAsync(request, filePath).Result;
         }
 
         #endregion
 
         #region DownloadDocument
 
-        public DownloadDocumentResponse DownloadDocument(DownloadDocumentRequest request)
+        public async Task<DownloadDocumentResponse> DownloadDocumentAsync(DownloadDocumentRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException("request");
 
             DownloadDocumentResponse response = null;
-            var httpResponse = SendGetRequest(request, "DownloadDocument");
+            var httpResponse = await SendGetRequestAsync(request, "DownloadDocument");
 
             //The DownloadDocument endpoint will return either the file as an attachment, or a JSON object if there was an error.
 
@@ -95,14 +116,14 @@ namespace GIDX.SDK
             else
             {
                 //File was not successfully returned, check for JSON response instead
-                response = LoadResponse<DownloadDocumentResponse>(httpResponse);
+                response = await LoadResponseAsync<DownloadDocumentResponse>(httpResponse);
             }
 
             response.DocumentID = request.DocumentID;
             return response;
         }
 
-        public DownloadDocumentResponse DownloadDocument(string documentID, string merchantSessionID)
+        public Task<DownloadDocumentResponse> DownloadDocumentAsync(string documentID, string merchantSessionID)
         {
             if (documentID == null)
                 throw new ArgumentNullException("documentID");
@@ -113,7 +134,17 @@ namespace GIDX.SDK
                 MerchantSessionID = merchantSessionID
             };
 
-            return DownloadDocument(request);
+            return DownloadDocumentAsync(request);
+        }
+
+        public DownloadDocumentResponse DownloadDocument(DownloadDocumentRequest request)
+        {
+            return DownloadDocumentAsync(request).Result;
+        }
+
+        public DownloadDocumentResponse DownloadDocument(string documentID, string merchantSessionID)
+        {
+            return DownloadDocumentAsync(documentID, merchantSessionID).Result;
         }
 
         #endregion

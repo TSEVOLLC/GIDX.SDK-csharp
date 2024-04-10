@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GIDX.SDK.Models.WebReg
+namespace GIDX.Samples.ConsoleApp
 {
-    public class SessionStatusCallbackResponse
+    interface ISample
     {
-        public string MerchantCustomerID { get; set; }
+        Task Run();
     }
 }

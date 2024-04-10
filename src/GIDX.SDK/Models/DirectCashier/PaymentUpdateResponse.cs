@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GIDX.SDK.Models.WebReg
+namespace GIDX.SDK.Models.DirectCashier
 {
-    public class SessionStatusCallbackResponse
+    public class PaymentUpdateResponse : PaymentDetailResponse
     {
-        public string MerchantCustomerID { get; set; }
+
     }
 }
