@@ -6,6 +6,10 @@ namespace GIDX.SDK.Models.DirectCashier
 {
     public class SavePaymentMethodRequest : RequestBase
     {
+        /// <summary>
+        /// Not required if <see cref="RequestBase.MerchantSessionID"/> references an active DirectCashier session
+        /// </summary>
+        public string MerchantCustomerID { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         
         /// <summary>
