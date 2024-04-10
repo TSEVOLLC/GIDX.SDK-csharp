@@ -6,7 +6,7 @@
     <RestorePackages>true</RestorePackages>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <VersionPrefix>3.0.2-alpha</VersionPrefix>
+    <VersionPrefix>3.0.3</VersionPrefix>
     <Company>TSEVO, LLC</Company>
     <Description>An SDK for accessing the GIDX API services.</Description>
     <PackageProjectUrl>https://github.com/TSEVOLLC/GIDX.SDK-csharp</PackageProjectUrl>
@@ -14,6 +14,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression> MIT-Modern-Variant</PackageLicenseExpression>
     <Title>GIDX SDK</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>Moved to .NET Standard 2.0. Added DirectCashier.</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DocumentationFile>bin\Debug\GIDX.SDK.xml</DocumentationFile>
@@ -21,6 +23,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DocumentationFile>bin\Release\GIDX.SDK.xml</DocumentationFile>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
