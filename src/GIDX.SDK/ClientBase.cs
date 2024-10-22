@@ -82,13 +82,11 @@ namespace GIDX.SDK
             var queryString = BuildQueryString(request);
             var fullUrl = string.Format("{0}?{1}", endpoint, queryString);
 
-            using (var httpRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(_baseAddress, fullUrl)))
-            {
-                httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var httpRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(_baseAddress, fullUrl));
+            httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var httpClient = _getHttpClient();
-                return httpClient.SendAsync(httpRequest);
-            }
+            var httpClient = _getHttpClient();
+            return httpClient.SendAsync(httpRequest);
         }
 
         protected async Task<TResponse> UploadFileAsync<TRequest, TResponse>(TRequest request, Stream fileStream, string fileName, string endpoint)

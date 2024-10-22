@@ -6,7 +6,7 @@
     <RestorePackages>true</RestorePackages>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <VersionPrefix>3.0.4</VersionPrefix>
+    <VersionPrefix>3.0.5</VersionPrefix>
     <Company>TSEVO, LLC</Company>
     <Description>An SDK for accessing the GIDX API services.</Description>
     <PackageProjectUrl>https://github.com/TSEVOLLC/GIDX.SDK-csharp</PackageProjectUrl>
