@@ -8,7 +8,7 @@ namespace GIDX.SDK.Models.DirectCashier
 {
     public class ApplePay : PaymentMethod
     {
-        public override string Type => "ApplePay";
+        public override string Type => PaymentMethodType.ApplePay;
 
         /// <summary>
         /// A JSON string of the full Payment object returned by the Apple Pay SDK.

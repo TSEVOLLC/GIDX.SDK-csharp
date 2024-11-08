@@ -8,7 +8,7 @@ namespace GIDX.SDK.Models.DirectCashier
 {
     public class GooglePay : PaymentMethod
     {
-        public override string Type => "GooglePay";
+        public override string Type => PaymentMethodType.GooglePay;
 
         /// <summary>
         /// A JSON string of the full PaymentData object returned by the Google Pay SDK.

@@ -6,6 +6,6 @@ namespace GIDX.SDK.Models.DirectCashier
 {
     public class BankAccountSettings : PaymentMethodSettings
     {
-        public override string Type => "ACH";
+        public override string Type => PaymentMethodType.BankAcount;
     }
 }

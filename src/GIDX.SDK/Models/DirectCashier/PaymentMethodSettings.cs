@@ -24,11 +24,11 @@ namespace GIDX.SDK.Models.DirectCashier
         {
             var types = new List<(string TypeName, Type Type)>
             {
-                ("ACH", typeof(BankAccountSettings)),
-                ("CC", typeof(CreditCardSettings)),
-                ("Paypal", typeof(PaypalAccountSettings)),
-                ("ApplePay", typeof(ApplePaySettings)),
-                ("GooglePay", typeof(GooglePaySettings))
+                (PaymentMethodType.BankAcount, typeof(BankAccountSettings)),
+                (PaymentMethodType.CreditCard, typeof(CreditCardSettings)),
+                (PaymentMethodType.Paypal, typeof(PaypalAccountSettings)),
+                (PaymentMethodType.ApplePay, typeof(ApplePaySettings)),
+                (PaymentMethodType.GooglePay, typeof(GooglePaySettings))
             };
 
             return types;

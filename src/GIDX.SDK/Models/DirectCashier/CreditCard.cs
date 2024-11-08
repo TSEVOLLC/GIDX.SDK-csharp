@@ -9,7 +9,7 @@ namespace GIDX.SDK.Models.DirectCashier
 {
     public class CreditCard : PaymentMethod
     {
-        public override string Type => "CC";
+        public override string Type => PaymentMethodType.CreditCard;
 
         public string CardNumber { get; set; }
         public string CVV { get; set; }
