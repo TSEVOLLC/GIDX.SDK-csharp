@@ -32,7 +32,9 @@ namespace GIDX.SDK.Models.DirectCashier
             {
                 ("ACH", typeof(BankAccount)),
                 ("CC", typeof(CreditCard)),
-                ("Paypal", typeof(PaypalAccount))
+                ("Paypal", typeof(PaypalAccount)),
+                ("ApplePay", typeof(ApplePay)),
+                ("GooglePay", typeof(GooglePay))
             };
 
             return types;

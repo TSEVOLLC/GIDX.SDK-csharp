@@ -18,6 +18,7 @@ namespace GIDX.SDK.Models.DirectCashier
         public CashierLimits Limits { get; set; }
         public List<PaymentAmountOption> PaymentAmounts { get; set; }
         public List<PaymentMethod> PaymentMethods { get; set; }
+        public List<PaymentMethodSettings> PaymentMethodSettings { get; set; }
         public LocationDetail LocationDetail { get; set; }
         public List<string> ReasonCodes { get; set; }
 
