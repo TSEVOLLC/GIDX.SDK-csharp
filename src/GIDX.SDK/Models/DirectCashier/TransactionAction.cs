@@ -25,7 +25,8 @@ namespace GIDX.SDK.Models.DirectCashier
             var types = new List<(string TypeName, Type Type)>
             {
                 ("Open", typeof(OpenAction)),
-                ("Paypal", typeof(PaypalAction))
+                ("Paypal", typeof(PaypalAction)),
+                ("3DSChallenge", typeof(ThreeDSChallengeAction))
             };
 
             return types;
