@@ -10,6 +10,8 @@ namespace GIDX.SDK.Models.DirectCashier
     public abstract class PaymentMethodSettings
     {
         public abstract string Type { get; }
+
+        public TokenizerSettings Tokenizer { get; set; }
     }
 
     public class PaymentMethodSettingsDiscriminatorOptions : DiscriminatorOptions
