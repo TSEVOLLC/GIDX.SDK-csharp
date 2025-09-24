@@ -16,5 +16,8 @@ namespace GIDX.SDK.Models.DirectCashier
         public CashierPaymentAmount PaymentAmount { get; set; }
 
         public CustomerDetails CustomerRegistration { get; set; }
+
+        public string Processor { get; set; }
+        public string ProcessorSessionID { get; set; }
     }
 }
