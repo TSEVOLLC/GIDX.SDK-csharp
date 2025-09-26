@@ -9,6 +9,7 @@ namespace GIDX.SDK
     public interface IGIDXClient : IClient
     {
         ICustomerIdentityClient CustomerIdentity { get; }
+        IDocumentInsightClient DocumentInsight { get; }
         IDocumentLibraryClient DocumentLibrary { get; }
         IWebCashierClient WebCashier { get; }
         IWebMyAccountClient WebMyAccount { get; }

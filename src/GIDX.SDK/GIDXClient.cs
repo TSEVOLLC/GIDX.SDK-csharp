@@ -165,6 +165,17 @@ namespace GIDX.SDK
             }
         }
 
+        private IDocumentInsightClient _documentInsight;
+        public IDocumentInsightClient DocumentInsight
+        {
+            get
+            {
+                if (_documentInsight == null)
+                    _documentInsight = new DocumentInsightClient(Credentials, _baseAddress, _getHttpClient);
+                return _documentInsight;
+            }
+        }
+
         private IDocumentLibraryClient _documentLibrary;
         public IDocumentLibraryClient DocumentLibrary
         {
