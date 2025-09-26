@@ -43,9 +43,10 @@ namespace GIDX.Samples.ConsoleApp
             using IServiceScope scope = host.Services.CreateScope();
             //await scope.ServiceProvider.GetRequiredService<DirectCashierSample>().Run();
             //await scope.ServiceProvider.GetRequiredService<CustomerProfileSample>().Run();
-            //await scope.ServiceProvider.GetRequiredService<CustomerRegistrationSample>().Run();
+            await scope.ServiceProvider.GetRequiredService<CustomerRegistrationSample>().Run();
             //await scope.ServiceProvider.GetRequiredService<CustomerUpdateSample>().Run();
-            await scope.ServiceProvider.GetRequiredService<PaymentDetailSample>().Run();
+            //await scope.ServiceProvider.GetRequiredService<PaymentDetailSample>().Run();
+            //await scope.ServiceProvider.GetRequiredService<DocumentInsightSample>().Run();
 
             await host.RunAsync();
         }
@@ -57,6 +58,7 @@ namespace GIDX.Samples.ConsoleApp
             services.AddTransient<CustomerRegistrationSample>();
             services.AddTransient<CustomerUpdateSample>();
             services.AddTransient<PaymentDetailSample>();
+            services.AddTransient<DocumentInsightSample>();
         }
     }
 }
