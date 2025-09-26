@@ -6,7 +6,7 @@
     <RestorePackages>true</RestorePackages>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <VersionPrefix>3.0.8</VersionPrefix>
+    <VersionPrefix>3.1.0</VersionPrefix>
     <Company>TSEVO, LLC</Company>
     <Description>An SDK for accessing the GIDX API services.</Description>
     <PackageProjectUrl>https://github.com/TSEVOLLC/GIDX.SDK-csharp</PackageProjectUrl>
@@ -15,7 +15,7 @@
     <PackageLicenseExpression> MIT-Modern-Variant</PackageLicenseExpression>
     <Title>GIDX SDK</Title>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>Moved to .NET Standard 2.0. Added DirectCashier.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added DocumentInsight.</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DocumentationFile>bin\Debug\GIDX.SDK.xml</DocumentationFile>
