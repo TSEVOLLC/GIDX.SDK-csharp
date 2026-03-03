@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,5 +20,7 @@ namespace GIDX.SDK.Models.DirectCashier
 
         public string Processor { get; set; }
         public string ProcessorSessionID { get; set; }
+
+        public object RapidChargebackProtectionData { get; set; }
     }
 }
