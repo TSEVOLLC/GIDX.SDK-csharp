@@ -21,6 +21,6 @@ namespace GIDX.SDK.Models.DirectCashier
         public string Processor { get; set; }
         public string ProcessorSessionID { get; set; }
 
-        public object RapidChargebackProtectionData { get; set; }
+        public RapidChargebackProtectionData RapidChargebackProtectionData { get; set; }
     }
 }
